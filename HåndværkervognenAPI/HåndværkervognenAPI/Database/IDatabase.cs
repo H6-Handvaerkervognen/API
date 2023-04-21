@@ -1,4 +1,5 @@
-﻿using HåndværkervognenAPI.Models;
+﻿using HåndværkervognenAPI.Model;
+using HåndværkervognenAPI.Models;
 
 namespace HåndværkervognenAPI.Database
 {
@@ -7,7 +8,7 @@ namespace HåndværkervognenAPI.Database
         AlarmDal GetAlarmInfo(string alarmId);
         void PairAlarms(string appID, AlarmDal alarmInfo);
         List<AlarmDal> GetAlarms(string appId);
-        void UpdateTimespan(string appId, AlarmDal alarmInfo);
+        void UpdateTimespan(string appId, AlarmInfoDto alarmInfo);
         UserDal GetUser(string username);
         void createUser(UserDal user);
         void DeleteUser(string username);
