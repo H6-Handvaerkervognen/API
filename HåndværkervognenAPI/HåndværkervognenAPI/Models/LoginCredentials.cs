@@ -7,17 +7,9 @@
 		private string password;
 
 
-		public string Username
-		{
-			get { return username; }
-			set { username = value; }
-		}
+		public string Username { get; private set; }
 
-        public string Password
-        {
-            get { return password; }
-            set { password = value; }
-        }
+        public string Password { get; private set; }
 
         public LoginCredentials(string username, string password)
         {

@@ -10,26 +10,10 @@
 
 		private string name;
 
-		public TimeSpan StartTime
-		{
-			get { return startTime; }
-			set { startTime = value; }
-		}
-        public TimeSpan EndTime
-        {
-            get { return endTime; }
-            set { endTime = value; }
-        }
-        public string AlarmId
-        {
-            get { return alarmId; }
-            set { alarmId = value; }
-        }
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+		public TimeSpan StartTime { get; private set; }
+        public TimeSpan EndTime { get; private set; }
+        public string AlarmId { get; private set; }
+        public string Name { get; private set; }
 
         public AlarmInfoDto(TimeSpan startTime, TimeSpan endTime, string alarmId, string name)
         {
