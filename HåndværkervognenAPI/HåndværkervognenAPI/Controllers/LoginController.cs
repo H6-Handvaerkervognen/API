@@ -1,4 +1,5 @@
 ﻿using HåndværkervognenAPI.Managers;
+using HåndværkervognenAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HåndværkervognenAPI.Controllers
@@ -15,20 +16,20 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         [HttpPost(Name = "Login")]
-        public bool Login(string username, string pass)
+        public bool Login(LoginCredentials loginCredentials)
         {
             loginService.AuthorizeLogin(username, pass);
             return true;
         }
         [HttpPost(Name = "CreateNewUser")]
-        public void CreateNewUser(string username, string pass)
+        public void CreateNewUser(LoginCredentials loginCredentials)
         {
         loginService.RegisterUser(username, pass);
         }
         [HttpPost(Name = "DeleteUser")]
-        public void DeleteUser(string appId)
+        public void DeleteUser(string username)
         {
-            loginService.DeleteUser(appId);
+            loginService.DeleteUser(username);
         }
     }
 }

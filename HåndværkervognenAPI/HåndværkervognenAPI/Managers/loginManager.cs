@@ -17,27 +17,30 @@ namespace HåndværkervognenAPI.Managers
             this.hashing = hashing;
         }
 
-        public bool AuthorizeLogin(string username, string password)
+      
+
+        public bool AuthorizeLogin(LoginCredentials loginCredentials)
         {
-            UserDal user = database.GetUser(username);
-            var hashPassword = hashing.GenerateHash(password, user.Salt).ToString();
-          
-            if (hashPassword == password)
+            UserDal user = database.GetUser(loginCredentials.Username);
+            var hashPassword = hashing.GenerateHash(loginCredentials.Password, user.Salt).ToString();
+
+            if (hashPassword == loginCredentials.Password)
             {
                 return true;
-            }else return false;
+            }
+            else return false;
         }
 
-        public void DeleteUser(string uid)
+        public void DeleteUser(string username)
         {
-            database.DeleteUser(uid);
+            database.DeleteUser(username);
         }
 
-        public void RegisterUser(string username, string password)
+        public void RegisterUser(LoginCredentials loginCredentials)
         {
             var salt = hashing.GenerateSalt();
-            var hashPassword = hashing.GenerateHash(password,salt).ToString();
-            UserDal user = new UserDal(username, hashPassword, salt);
+            var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt).ToString();
+            UserDal user = new UserDal(loginCredentials.Username, hashPassword, salt);
             database.createUser(user);
         }
     }

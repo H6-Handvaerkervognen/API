@@ -7,10 +7,9 @@ namespace HåndværkervognenAPI.Managers
     {
         private IDatabase _database;
 
-        public IDatabase DataBase
+        public AppManager(IDatabase database)
         {
-            get { return _database; }
-            set { _database = value; }
+            _database= database;
         }
 
 
