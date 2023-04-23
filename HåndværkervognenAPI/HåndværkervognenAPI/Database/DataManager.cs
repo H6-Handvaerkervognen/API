@@ -1,4 +1,5 @@
-﻿using HåndværkervognenAPI.Models;
+﻿using HåndværkervognenAPI.Model;
+using HåndværkervognenAPI.Models;
 
 namespace HåndværkervognenAPI.Database
 {
@@ -44,7 +45,7 @@ namespace HåndværkervognenAPI.Database
             throw new NotImplementedException();
         }
 
-        public void UpdateTimespan(string appId, AlarmDal alarmInfo)
+        public void UpdateTimespan(string appId, AlarmInfoDto alarmInfo)
         {
             throw new NotImplementedException();
         }

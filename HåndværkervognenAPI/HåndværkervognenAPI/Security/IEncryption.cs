@@ -1,4 +1,4 @@
-﻿namespace HåndværkervognenAPI
+﻿namespace HåndværkervognenAPI.Security
 {
     public interface IEncryption
     {

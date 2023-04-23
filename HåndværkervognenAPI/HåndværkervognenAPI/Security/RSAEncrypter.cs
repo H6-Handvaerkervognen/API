@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Security.Cryptography;
 
-namespace HåndværkervognenAPI
+namespace HåndværkervognenAPI.Security
 {
     public class RSAEncrypter : IEncryption
     {
