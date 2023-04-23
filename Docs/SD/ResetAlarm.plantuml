@@ -1,0 +1,15 @@
+@startuml
+skinparam ResponseMessageBelowArrow true
+
+actor Alarm
+participant AlarmController
+participant AlarmManager
+participant DatabaseManager
+
+
+Alarm -> AlarmController ++: Reset alarm request
+AlarmController -> AlarmManager --++: Reset alarm
+AlarmManager -> DatabaseManager --++: Reset alarm
+DatabaseManager -> DatabaseManager ++-- : Remove alarm pairings
+
+@enduml

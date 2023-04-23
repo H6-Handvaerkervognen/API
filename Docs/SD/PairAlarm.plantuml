@@ -1,0 +1,20 @@
+@startuml
+skinparam ResponseMessageBelowArrow true
+
+actor AppRequests
+participant AppController
+participant AppManager
+participant Hashing
+participant Encrypter
+participant DatabaseManager
+
+AppRequests -> AppController ++ : Send pairing info
+AppController -> AppManager --++ : Send pairing info
+AppManager -> Hashing ++: Hash alarmId
+Hashing --> AppManager --: Hashed alarmId
+AppManager -> Encrypter ++ : Encrypt times
+Encrypter --> AppManager --: Encrypted times
+AppManager -> AppManager ++-- : Create dal object
+AppManager -> DatabaseManager ++-- : Save pair details
+DatabaseManager -> DatabaseManager ++-- : Save pair details
+@enduml
