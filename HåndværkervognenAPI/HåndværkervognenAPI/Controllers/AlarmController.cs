@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HåndværkervognenAPI.Managers;
+using HåndværkervognenAPI.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HåndværkervognenAPI.Controllers
 {
@@ -6,21 +8,43 @@ namespace HåndværkervognenAPI.Controllers
     [Route("[controller]/[action]")]
     public class AlarmController:ControllerBase
     {
+        private IAlarmService _alarmService;
+
+        public AlarmController(IAlarmService alarmService)
+        {
+            _alarmService = alarmService;
+        }
+
+
+
         [HttpGet(Name = "GetAlarmInfo")]
         public IActionResult GetAlarmInfo(string AppId)
         {
-            return Ok(true);
+           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(AppId);
+            if (alarmInfo==null)
+            {
+                return BadRequest();
+            }
+            return Ok(alarmInfo);
         }
 
         [HttpPost(Name = "DeleteParring")]
         public IActionResult DeleteParring(string AlarmID)
         {
-            return Ok();
+            if (_alarmService.DeletePairing(AlarmID))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
         [HttpPost(Name = "ActivateAlarm")]
         public IActionResult ActivateAlarm(string AlarmID)
         {
-            return Ok();
+            if (_alarmService.AlertUser(AlarmID))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

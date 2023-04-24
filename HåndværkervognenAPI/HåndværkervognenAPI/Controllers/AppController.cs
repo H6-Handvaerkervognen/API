@@ -9,7 +9,7 @@ namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class AppController: ControllerBase
+    public class AppController : ControllerBase
     {
         private IAppService _appService;
 
@@ -18,19 +18,23 @@ namespace HåndværkervognenAPI.Controllers
             _appService = appService;
         }
 
-        
+
         [HttpPost(Name = "UpdateTimespan")]
         public IActionResult UpdateTimespan(PairInfo pairInfo)
         {
-           _appService.UpdateTimeSpan(pairInfo.AppId, pairInfo.AlarmInfo);
-       return Ok();
-            
+            bool response = _appService.UpdateTimeSpan(pairInfo.AppId, pairInfo.AlarmInfo);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest();
+
         }
         [HttpGet(Name = "GetAlarms")]
         public IActionResult GetAlarms(string AppID)
         {
             var alarms = _appService.GetAlarms(AppID);
-            if (alarms == null|| alarms.Count >=0)
+            if (alarms == null || alarms.Count >= 0)
             {
                 return NotFound();
             }
@@ -39,14 +43,22 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "PairAlarm")]
         public IActionResult PairAlarm(PairInfo pairInfo)
         {
-            _appService.PairAlarm(pairInfo);
-            return Ok();
+            bool response = _appService.PairAlarm(pairInfo);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
         [HttpPost(Name = "StopAlarm")]
         public IActionResult StopAlarm(string AlarmID)
         {
-            _appService.StopAlarm(AlarmID);
-            return Ok();
+            bool response = _appService.StopAlarm(AlarmID);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

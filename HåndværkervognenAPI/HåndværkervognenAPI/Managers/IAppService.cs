@@ -4,9 +4,9 @@ namespace HåndværkervognenAPI.Managers
 {
     public interface IAppService
     {
-        void UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo);
-        void PairAlarm(PairInfo info);
+        bool UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo);
+        bool PairAlarm(PairInfo info);
         List<AlarmInfoDto>GetAlarms(string AppId);
-        void StopAlarm(string AlarmId);
+        bool StopAlarm(string AlarmId);
     }
 }

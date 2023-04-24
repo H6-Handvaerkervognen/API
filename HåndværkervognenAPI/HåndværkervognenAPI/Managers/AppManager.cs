@@ -31,25 +31,29 @@ namespace HåndværkervognenAPI.Managers
             return alarmInfoDtos;
         }
 
-        public void PairAlarm(PairInfo info)
+        public bool PairAlarm(PairInfo info)
         {
             //convert to alarmDal and hash AlarmId
            byte[] newSalt = _hashing.GenerateSalt();
-           // _database.PairAlarms(info.AppId, info.);
+            // _database.PairAlarms(info.AppId, info.);
+
+            return true;
         }
 
-        public void StopAlarm(string AlarmId)
+        public bool StopAlarm(string AlarmId)
         {
             _database.StopAlarm(AlarmId);
+            return true;
         }
 
-        public void UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo)
+        public bool UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo)
         {
            
             //todo hash alarmId
 
             AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()),alarmInfo.AlarmId, alarmInfo.Name);
             _database.UpdateTimespan(AppId, alarm);
+            return true;
         }
     }
 }
