@@ -3,23 +3,24 @@
 namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class AlarmController
+    [Route("[controller]/[action]")]
+    public class AlarmController:ControllerBase
     {
         [HttpGet(Name = "GetAlarmInfo")]
-        public bool GetAlarmInfo(string AppId)
+        public IActionResult GetAlarmInfo(string AppId)
         {
-            return true;
+            return Ok(true);
         }
-        [HttpPost(Name = "DeleteParring")]
-        public void DeleteParring(string AlarmID)
-        {
 
+        [HttpPost(Name = "DeleteParring")]
+        public IActionResult DeleteParring(string AlarmID)
+        {
+            return Ok();
         }
         [HttpPost(Name = "ActivateAlarm")]
-        public void ActivateAlarm(string AlarmID)
+        public IActionResult ActivateAlarm(string AlarmID)
         {
-
+            return Ok();
         }
     }
 }

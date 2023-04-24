@@ -1,4 +1,8 @@
 
+using HåndværkervognenAPI.Database;
+using HåndværkervognenAPI.Managers;
+using HåndværkervognenAPI.Security;
+
 namespace HåndværkervognenAPI
 {
     public class Program
@@ -8,7 +12,11 @@ namespace HåndværkervognenAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddScoped<ILoginService, loginManager>();
+            builder.Services.AddScoped<IAppService, AppManager>();
+            builder.Services.AddScoped<IAlarmService, NotificationAlarmManager>();
+            builder.Services.AddScoped<IDatabase, DataManager>();
+            builder.Services.AddScoped<IHashing, Hasher>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

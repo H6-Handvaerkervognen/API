@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace HåndværkervognenAPI.Security
 {
@@ -19,7 +20,7 @@ namespace HåndværkervognenAPI.Security
             }
         }
 
-        public byte[] DecryptData(byte[] data)
+        public string DecryptData(string data)
         {
             byte[] cipherbytes;
 
@@ -28,12 +29,13 @@ namespace HåndværkervognenAPI.Security
                 rsa.PersistKeyInCsp = false;
                 rsa.ImportParameters(_publicKey);
 
-                cipherbytes = rsa.Encrypt(data, true);
+                cipherbytes = rsa.Encrypt(Encoding.ASCII.GetBytes(data), true);
             }
-            return cipherbytes;
+
+            return cipherbytes.ToString();
         }
 
-        public byte[] EncryptData(byte[] data)
+        public string EncryptData(string data)
         {
             byte[] plain;
 
@@ -42,9 +44,9 @@ namespace HåndværkervognenAPI.Security
                 rsa.PersistKeyInCsp = false;
 
                 rsa.ImportParameters(_privateKey);
-                plain = rsa.Decrypt(data, true);
+                plain = rsa.Decrypt(Encoding.ASCII.GetBytes(data), true);
             }
-            return plain;
+            return plain.ToString();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace HåndværkervognenAPI.Database
             throw new NotImplementedException();
         }
 
-        public void UpdateTimespan(string appId, AlarmInfoDto alarmInfo)
+        public void UpdateTimespan(string appId, AlarmDal alarmDal)
         {
             throw new NotImplementedException();
         }

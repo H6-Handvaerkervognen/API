@@ -3,7 +3,7 @@
     public interface IEncryption
     {
         public void AssignNewKeys();
-        public byte[] EncryptData(byte[] data);
-        public byte[] DecryptData(byte[] data);
+        public string EncryptData(string data);
+        public string DecryptData(string data);
     }
 }
