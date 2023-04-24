@@ -37,3 +37,4 @@ C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenA
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\HåndværkervognenAPI.pdb
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\HåndværkervognenAPI.genruntimeconfig.cache
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\ref\HåndværkervognenAPI.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\PBKDF2.NET.dll

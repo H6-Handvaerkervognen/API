@@ -81,6 +81,19 @@
           }
         }
       },
+      "PBKDF2.NET/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/PBKDF2.NET.dll": {
+            "related": ".XML"
+          }
+        },
+        "runtime": {
+          "lib/net45/PBKDF2.NET.dll": {
+            "related": ".XML"
+          }
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -580,6 +593,23 @@
         "version.txt"
       ]
     },
+    "PBKDF2.NET/2.0.0": {
+      "sha512": "cM9V2bJ9aOc2wPGHa51JAi0eaq4N3r7rnyeFyJzsKYZL8ramCWJQicx43n29Dgz7eSb3GX52nEG7xl5Zy8c1sw==",
+      "type": "package",
+      "path": "pbkdf2.net/2.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "content/app.config.transform",
+        "content/web.config.transform",
+        "lib/net45/PBKDF2.NET.XML",
+        "lib/net45/PBKDF2.NET.dll",
+        "pbkdf2.net.2.0.0.nupkg.sha512",
+        "pbkdf2.net.nuspec",
+        "readme.txt"
+      ]
+    },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "sha512": "9kyFSIdN3T0qjDQ2R0HRXYIhS3l5psBzQi6qqhdLz+SzFyEy4sVxNOke+yyYv8Cu8rPER12c3RDjLT8wF3WBYQ==",
       "type": "package",
@@ -914,6 +944,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "Microsoft.AspNetCore.OpenApi >= 7.0.5",
+      "PBKDF2.NET >= 2.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0",
       "System.Data.SqlClient >= 4.8.5"
     ]
@@ -961,6 +992,10 @@
             "target": "Package",
             "version": "[7.0.5, )"
           },
+          "PBKDF2.NET": {
+            "target": "Package",
+            "version": "[2.0.0, )"
+          },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.4.0, )"
@@ -992,5 +1027,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'PBKDF2.NET 2.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "PBKDF2.NET",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }

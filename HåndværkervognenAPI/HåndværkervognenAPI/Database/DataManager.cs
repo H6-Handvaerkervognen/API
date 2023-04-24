@@ -6,7 +6,9 @@ namespace HåndværkervognenAPI.Database
 {
     public class DataManager : IDatabase
     {
-        string _connString = "";
+        //SERVER
+        //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
+        string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
@@ -17,25 +19,26 @@ namespace HåndværkervognenAPI.Database
             _sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
             _sqlCommand.CommandText = procedure;
         }
-        public void createUser(UserDal user)
+        public void CreateUser(UserDal user)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("CreateUser");
-                _sqlCommand.Parameters.AddWithValue("username", user.UserName);
-                _sqlCommand.Parameters.AddWithValue("username", user.HashPassword);
-                _sqlCommand.Parameters.AddWithValue("username", user.Salt);
+                _sqlCommand.Parameters.AddWithValue("Username", user.UserName);
+                _sqlCommand.Parameters.AddWithValue("Password", user.HashPassword);
+                _sqlCommand.Parameters.AddWithValue("Salt", user.Salt);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
         }
 
-        public void DeletePairing(string alarmId)
+        public void DeletePairing(string alarmId, string username)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("DeletePairing");
-                _sqlCommand.Parameters.AddWithValue("alarmId", alarmId);
+                _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
@@ -46,7 +49,7 @@ namespace HåndværkervognenAPI.Database
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("DeleteUser");
-                _sqlCommand.Parameters.AddWithValue("username", username);
+                _sqlCommand.Parameters.AddWithValue("Username", username);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
@@ -54,22 +57,20 @@ namespace HåndværkervognenAPI.Database
 
         public AlarmDal GetAlarmInfo(string alarmId)
         {
-            AlarmDal alarm = new AlarmDal();
+            AlarmDal alarm;
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("GetAlarmInfo");
-                _sqlCommand.Parameters.AddWithValue("alarmId", alarmId);
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
                 _sqlCommand.Connection.Open();
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    alarm.StartTime = _sqlDataReader.GetString(0);
-                    alarm.EndTime = _sqlDataReader.GetString(1);
-                    alarm.Name = _sqlDataReader.GetString(2);
+                    alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
                 }
                 _sqlDataReader.Close();
             }
-            return alarm;
+            return null;
         }
 
         public List<AlarmDal> GetAlarms(string appId)
@@ -78,16 +79,12 @@ namespace HåndværkervognenAPI.Database
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("GetAlarmsByUser");
-                _sqlCommand.Parameters.AddWithValue("username", appId);
+                _sqlCommand.Parameters.AddWithValue("Username", appId);
                 _sqlCommand.Connection.Open();
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    AlarmDal alarm = new AlarmDal();
-                    alarm.AlarmId = _sqlDataReader.GetString(0);
-                    alarm.StartTime = _sqlDataReader.GetString(1);
-                    alarm.EndTime = _sqlDataReader.GetString(2);
-                    alarm.Name = _sqlDataReader.GetString(3);
+                    AlarmDal alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
                     alarms.Add(alarm);
                 }
                 _sqlDataReader.Close();
@@ -100,7 +97,7 @@ namespace HåndværkervognenAPI.Database
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("GetUser");
-                _sqlCommand.Parameters.AddWithValue("username", username);
+                _sqlCommand.Parameters.AddWithValue("Username", username);
                 _sqlCommand.Connection.Open();
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
@@ -118,11 +115,12 @@ namespace HåndværkervognenAPI.Database
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("AddPair");
-                _sqlCommand.Parameters.AddWithValue("username", appID);
-                _sqlCommand.Parameters.AddWithValue("alarmId", alarmInfo.AlarmId);
-                _sqlCommand.Parameters.AddWithValue("startTime", alarmInfo.StartTime);
-                _sqlCommand.Parameters.AddWithValue("endTime", alarmInfo.EndTime);
-                _sqlCommand.Parameters.AddWithValue("name", alarmInfo.Name);
+                _sqlCommand.Parameters.AddWithValue("Username", appID);
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmInfo.AlarmId);
+                _sqlCommand.Parameters.AddWithValue("StartTime", alarmInfo.StartTime);
+                _sqlCommand.Parameters.AddWithValue("EndTime", alarmInfo.EndTime);
+                _sqlCommand.Parameters.AddWithValue("Name", alarmInfo.Name);
+                _sqlCommand.Parameters.AddWithValue("Salt", alarmInfo.Salt);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
@@ -133,6 +131,7 @@ namespace HåndværkervognenAPI.Database
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("StopAlarm");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
                 _sqlCommand.Parameters.AddWithValue("AlarmOn", 0);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
@@ -144,9 +143,21 @@ namespace HåndværkervognenAPI.Database
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("UpdateActiveHours");
-                _sqlCommand.Parameters.AddWithValue("username", appId);
-                _sqlCommand.Parameters.AddWithValue("startTime", alarmInfo.StartTime);
-                _sqlCommand.Parameters.AddWithValue("endTime", alarmInfo.EndTime);
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmDal.AlarmId);
+                _sqlCommand.Parameters.AddWithValue("startTime", alarmDal.StartTime);
+                _sqlCommand.Parameters.AddWithValue("EndTime", alarmDal.EndTime);
+                _sqlCommand.Connection.Open();
+                _sqlCommand.ExecuteNonQuery();
+            }
+        }
+
+        public void StartAlarm(string alarmId)
+        {
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("StartAlarm");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
+                _sqlCommand.Parameters.AddWithValue("AlarmOn", 1);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }

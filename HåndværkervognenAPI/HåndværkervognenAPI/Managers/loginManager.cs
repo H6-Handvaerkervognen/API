@@ -41,7 +41,7 @@ namespace HåndværkervognenAPI.Managers
             var salt = hashing.GenerateSalt();
             var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt).ToString();
             UserDal user = new UserDal(loginCredentials.Username, hashPassword, salt);
-            database.createUser(user);
+            database.CreateUser(user);
         }
     }
 }

@@ -9,6 +9,7 @@
       "HåndværkervognenAPI/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "7.0.5",
+          "PBKDF2.NET": "2.0.0",
           "Swashbuckle.AspNetCore": "6.4.0",
           "System.Data.SqlClient": "4.8.5"
         },
@@ -41,6 +42,14 @@
         "dependencies": {
           "System.Security.AccessControl": "4.7.0",
           "System.Security.Principal.Windows": "4.7.0"
+        }
+      },
+      "PBKDF2.NET/2.0.0": {
+        "runtime": {
+          "lib/net45/PBKDF2.NET.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
         }
       },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
@@ -191,6 +200,13 @@
       "sha512": "sha512-KSrRMb5vNi0CWSGG1++id2ZOs/1QhRqROt+qgbEAdQuGjGrFcl4AOl4/exGPUYz2wUnU42nvJqon1T3U0kPXLA==",
       "path": "microsoft.win32.registry/4.7.0",
       "hashPath": "microsoft.win32.registry.4.7.0.nupkg.sha512"
+    },
+    "PBKDF2.NET/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cM9V2bJ9aOc2wPGHa51JAi0eaq4N3r7rnyeFyJzsKYZL8ramCWJQicx43n29Dgz7eSb3GX52nEG7xl5Zy8c1sw==",
+      "path": "pbkdf2.net/2.0.0",
+      "hashPath": "pbkdf2.net.2.0.0.nupkg.sha512"
     },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "type": "package",
