@@ -26,8 +26,8 @@ namespace HåndværkervognenAPI.Managers
             List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
             foreach (AlarmDal alarm in alarms)
             {
-                //alarmInfoDtos.Add(new AlarmInfoDto(TimeSpan.Parse(_encryption.DecryptData(alarm.StartTime)), TimeSpan.Parse(_encryption.DecryptData(alarm.EndTime)), alarm.AlarmId, _encryption.DecryptData(alarm.Name)));
-                alarmInfoDtos.Add(new AlarmInfoDto(TimeSpan.Parse(alarm.StartTime), TimeSpan.Parse(alarm.EndTime), alarm.AlarmId, alarm.Name));
+                alarmInfoDtos.Add(new AlarmInfoDto(TimeSpan.Parse(_encryption.DecryptData(alarm.StartTime)), TimeSpan.Parse(_encryption.DecryptData(alarm.EndTime)), alarm.AlarmId, _encryption.DecryptData(alarm.Name)));
+             
             }
             return alarmInfoDtos;
         }
