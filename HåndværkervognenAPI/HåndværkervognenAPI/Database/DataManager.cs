@@ -1,4 +1,5 @@
-﻿using HåndværkervognenAPI.Models;
+﻿using HåndværkervognenAPI.Model;
+using HåndværkervognenAPI.Models;
 using System.Data.SqlClient;
 
 namespace HåndværkervognenAPI.Database
@@ -138,7 +139,7 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
-        public void UpdateTimespan(string appId, AlarmDal alarmInfo)
+        public void UpdateTimespan(string appId, AlarmDal alarmDal)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {

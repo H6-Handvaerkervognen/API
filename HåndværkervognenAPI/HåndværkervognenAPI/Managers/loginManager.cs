@@ -1,33 +1,47 @@
 ﻿using HåndværkervognenAPI.Database;
+using HåndværkervognenAPI.Models;
+using HåndværkervognenAPI.Security;
 
 namespace HåndværkervognenAPI.Managers
 {
     public class loginManager : ILoginService
     {
-        private IDatabase _database;
+        private IDatabase database;
+        private IHashing hashing;
 
 
-        public IDatabase Database
+
+        public loginManager(IDatabase database, IHashing hashing)
         {
-            get { return _database; }
-            set { _database = value; }
+            this.database = database;
+            this.hashing = hashing;
         }
 
+      
 
-
-        public bool AuthorizeLogin(string username, string password)
+        public bool AuthorizeLogin(LoginCredentials loginCredentials)
         {
-            throw new NotImplementedException();
+            UserDal user = database.GetUser(loginCredentials.Username);
+            var hashPassword = hashing.GenerateHash(loginCredentials.Password, user.Salt).ToString();
+
+            if (hashPassword == loginCredentials.Password)
+            {
+                return true;
+            }
+            else return false;
         }
 
-        public void DeleteUser(string uid)
+        public void DeleteUser(string username)
         {
-            throw new NotImplementedException();
+            database.DeleteUser(username);
         }
 
-        public void RegisterUser(string username, string password)
+        public void RegisterUser(LoginCredentials loginCredentials)
         {
-            throw new NotImplementedException();
+            var salt = hashing.GenerateSalt();
+            var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt).ToString();
+            UserDal user = new UserDal(loginCredentials.Username, hashPassword, salt);
+            database.createUser(user);
         }
     }
 }

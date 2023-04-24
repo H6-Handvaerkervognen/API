@@ -1,27 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HåndværkervognenAPI.Managers;
+using HåndværkervognenAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class LoginController
+    [Route("[controller]/[action]")]
+    public class LoginController:ControllerBase
     {
-     
+        private ILoginService loginService;
+
+        public LoginController(ILoginService loginService)
+        {
+            this.loginService = loginService;
+        }
 
         [HttpPost(Name = "Login")]
-        public bool Login(string username, string pass)
+        public IActionResult Login(LoginCredentials loginCredentials)
         {
-            return true;
+            //loginService.AuthorizeLogin(loginCredentials);
+            return Ok(true);
         }
         [HttpPost(Name = "CreateNewUser")]
-        public void CreateNewUser(string username, string pass)
+        public IActionResult CreateNewUser(LoginCredentials loginCredentials)
         {
-     
+        loginService.RegisterUser(loginCredentials);
+            return Created("api/Login/CreateNewUser", loginCredentials);
         }
         [HttpPost(Name = "DeleteUser")]
-        public void DeleteUser(string username, string pass)
+        public IActionResult DeleteUser(string username)
         {
-            
+            loginService.DeleteUser(username);
+            return Ok();
         }
     }
 }
