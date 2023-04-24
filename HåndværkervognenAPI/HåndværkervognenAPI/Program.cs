@@ -17,6 +17,7 @@ namespace HåndværkervognenAPI
             builder.Services.AddScoped<IAlarmService, NotificationAlarmManager>();
             builder.Services.AddScoped<IDatabase, DataManager>();
             builder.Services.AddScoped<IHashing, Hasher>();
+            builder.Services.AddScoped<IEncryption, RSAEncrypter>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
