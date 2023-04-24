@@ -39,8 +39,8 @@ namespace HåndværkervognenAPI.Managers
         public void RegisterUser(LoginCredentials loginCredentials)
         {
             var salt = hashing.GenerateSalt();
-            var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt).ToString();
-            UserDal user = new UserDal(loginCredentials.Username, hashPassword, salt);
+            var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt);
+            UserDal user = new UserDal(loginCredentials.Username, hashPassword., salt);
             database.CreateUser(user);
         }
     }

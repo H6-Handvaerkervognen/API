@@ -7,8 +7,9 @@ namespace HåndværkervognenAPI.Database
     public class DataManager : IDatabase
     {
         //SERVER
-        string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
-        //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Trusted_Connection=True;";
+        //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
+        
+        string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
