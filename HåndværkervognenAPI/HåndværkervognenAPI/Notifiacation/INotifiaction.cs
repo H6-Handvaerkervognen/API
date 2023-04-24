@@ -2,6 +2,6 @@
 {
     public interface INotifiaction
     {
-        void SendNotification(string alarmId);
+         Task SendNotificationAsync(string alarmId);
     }
 }
