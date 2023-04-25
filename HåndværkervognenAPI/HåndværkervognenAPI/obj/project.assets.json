@@ -950,19 +950,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nann8059\\.nuget\\packages\\": {}
+    "C:\\Users\\Nansy\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Nansy\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
       "projectName": "HåndværkervognenAPI",
-      "projectPath": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
-      "packagesPath": "C:\\Users\\nann8059\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\obj\\",
+      "projectPath": "C:\\Users\\Nansy\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
+      "packagesPath": "C:\\Users\\Nansy\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Nansy\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nann8059\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Nansy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

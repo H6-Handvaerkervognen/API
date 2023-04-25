@@ -13,11 +13,9 @@ namespace HåndværkervognenAPI.Security
         /// </summary>
         public byte[] GenerateHash(string password, byte[] salt)
         {
-           
-                PBKDF2 hashGenerator = new PBKDF2(password, salt, HashingIterationsCount, "HMACSHA256");
-                byte[] hashedPassword = hashGenerator.GetBytes(HashByteSize);
-                return hashedPassword;
-            
+            PBKDF2 hashGenerator = new PBKDF2(password, salt, HashingIterationsCount, "HMACSHA256");
+            byte[] hashedPassword = hashGenerator.GetBytes(HashByteSize);
+            return hashedPassword;
         }
 
 

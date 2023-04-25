@@ -9,7 +9,7 @@ namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class AppController: ControllerBase
+    public class AppController : ControllerBase
     {
         private IAppService _appService;
 
@@ -18,19 +18,19 @@ namespace HåndværkervognenAPI.Controllers
             _appService = appService;
         }
 
-        
+
         [HttpPost(Name = "UpdateTimespan")]
         public IActionResult UpdateTimespan(PairInfo pairInfo)
         {
-           _appService.UpdateTimeSpan(pairInfo.AppId, pairInfo.AlarmInfo);
-       return Ok();
-            
+            _appService.UpdateTimeSpan(pairInfo.AppId, pairInfo.AlarmInfo);
+            return Ok();
+
         }
         [HttpGet(Name = "GetAlarms")]
         public IActionResult GetAlarms(string AppID)
         {
             var alarms = _appService.GetAlarms(AppID);
-            if (alarms == null|| alarms.Count >=0)
+            if (alarms == null || alarms.Count <= 0)
             {
                 return NotFound();
             }

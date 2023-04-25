@@ -1,5 +1,5 @@
 -- Creates a new user
-CREATE OR ALTER PROCEDURE CreateUser @Username VARCHAR(20), @Password VARCHAR(100), @Salt VARCHAR(100)
+CREATE OR ALTER PROCEDURE CreateUser @Username VARCHAR(20), @Password VARCHAR(200), @Salt VARBINARY(200)
 AS
 	INSERT INTO [Users]([Username], [Password], [Salt])
 	VALUES (@Username, @Password, @Salt);
@@ -18,7 +18,7 @@ AS
 GO
 
 -- Adds a pair between a user and an alarm (and inserts the alarm info in alarm table)
-CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(100), @EndTime VARCHAR(100), @Name VARCHAR(100), @Salt VARCHAR(100)
+CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200), @Salt VARCHAR(200)
 AS
 	IF NOT EXISTS(SELECT * FROM [Alarms] WHERE [Id] = @AlarmId)
 	BEGIN
