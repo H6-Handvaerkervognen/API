@@ -19,7 +19,11 @@ namespace HåndværkervognenAPI.Managers
             _hashing = hashing;
         }
 
-
+        /// <summary>
+        /// calls database and gets alarms for aspecific user and converts from alarmDal to alarminfoDTO before returning a list of alarminfoDTO
+        /// </summary>
+        /// <param name="AppId"></param>
+        /// <returns>list of alarminfoDTO</returns>
         public List<AlarmInfoDto> GetAlarms(string AppId)
         {
            List<AlarmDal> alarms = _database.GetAlarms(AppId);
@@ -32,6 +36,11 @@ namespace HåndværkervognenAPI.Managers
             return alarmInfoDtos;
         }
 
+        /// <summary>
+        /// creates a new salt for alarmid if its the first time the alarm is paired. the n is hashes the alarm id and encrypts the rest of the data and stores it 
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
         public bool PairAlarm(PairInfo info)
         {
             //convert to alarmDal and hash AlarmId
@@ -41,12 +50,23 @@ namespace HåndværkervognenAPI.Managers
             return true;
         }
 
+        /// <summary>
+        /// stops a specific alarm
+        /// </summary>
+        /// <param name="AlarmId"></param>
+        /// <returns></returns>
         public bool StopAlarm(string AlarmId)
         {
             _database.StopAlarm(AlarmId);
             return true;
         }
 
+        /// <summary>
+        /// converts the data to the rigth objects and saves the new timespan
+        /// </summary>
+        /// <param name="AppId"></param>
+        /// <param name="alarmInfo"></param>
+        /// <returns></returns>
         public bool UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo)
         {
            

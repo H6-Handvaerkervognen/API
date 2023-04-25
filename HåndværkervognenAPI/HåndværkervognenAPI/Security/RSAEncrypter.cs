@@ -20,6 +20,11 @@ namespace HåndværkervognenAPI.Security
             }
         }
 
+        /// <summary>
+        /// decypts a string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public string DecryptData(string data)
         {
             byte[] cipherbytes;
@@ -35,6 +40,11 @@ namespace HåndværkervognenAPI.Security
             return cipherbytes.ToString();
         }
 
+        /// <summary>
+        /// encypts a string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public string EncryptData(string data)
         {
             byte[] plain;

@@ -18,7 +18,11 @@ namespace HåndværkervognenAPI.Controllers
             _appService = appService;
         }
 
-
+        /// <summary>
+        /// post request for updateing timespan for a specific alarm
+        /// </summary>
+        /// <param name="pairInfo"></param>
+        /// <returns></returns>
         [HttpPost(Name = "UpdateTimespan")]
         public IActionResult UpdateTimespan(PairInfo pairInfo)
         {
@@ -30,6 +34,12 @@ namespace HåndværkervognenAPI.Controllers
             return BadRequest();
 
         }
+
+        /// <summary>
+        /// Get request for getting all alarms that belongs to a specific user
+        /// </summary>
+        /// <param name="AppID"></param>
+        /// <returns>list of alrms</returns>
         [HttpGet(Name = "GetAlarms")]
         public IActionResult GetAlarms(string AppID)
         {
@@ -38,8 +48,14 @@ namespace HåndværkervognenAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(alarms);
         }
+
+        /// <summary>
+        /// post request for parring of alarm and user
+        /// </summary>
+        /// <param name="pairInfo"></param>
+        /// <returns></returns>
         [HttpPost(Name = "PairAlarm")]
         public IActionResult PairAlarm(PairInfo pairInfo)
         {
@@ -50,6 +66,12 @@ namespace HåndværkervognenAPI.Controllers
             }
             return BadRequest();
         }
+
+        /// <summary>
+        /// post request for stopping an alrm from the app
+        /// </summary>
+        /// <param name="AlarmID"></param>
+        /// <returns></returns>
         [HttpPost(Name = "StopAlarm")]
         public IActionResult StopAlarm(string AlarmID)
         {

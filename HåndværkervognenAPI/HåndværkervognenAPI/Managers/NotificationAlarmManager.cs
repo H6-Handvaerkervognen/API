@@ -19,11 +19,17 @@ namespace HåndværkervognenAPI.Managers
             _notifiaction = notifiaction;
         }
 
+        /// <summary>
+        /// sends a notification to the user and starts the alrm in the database
+        /// </summary>
+        /// <param name="alarmId"></param>
+        /// <returns></returns>
         public bool AlertUser(string alarmId)
         {
             try
             {
                 _notifiaction.SendNotificationAsync(alarmId);
+                _database.StartAlarm(alarmId);
             }
             catch (Exception)
             {
@@ -32,15 +38,19 @@ namespace HåndværkervognenAPI.Managers
 
             }
             return true;
-           
         }
 
-        public bool DeletePairing(string alarmId)
+        /// <summary>
+        /// deletes the paring for a user
+        /// </summary>
+        /// <param name="alarmId"></param>
+        /// <returns></returns>
+        public bool DeletePairing(string alarmId, string username)
         {
             //todo
             try
             {
-              //  _database.DeletePairing(alarmId);
+              _database.DeletePairing(alarmId, username);
             }
             catch (Exception)
             {
@@ -51,6 +61,11 @@ namespace HåndværkervognenAPI.Managers
             return true;
         }
 
+        /// <summary>
+        /// gets info for specific alarm
+        /// </summary>
+        /// <param name="alarmid"></param>
+        /// <returns>AlarmInfoDto</returns>
         public AlarmInfoDto GetAlarmInfo(string alarmid)
         {
             AlarmDal alarmDal = _database.GetAlarmInfo(alarmid);

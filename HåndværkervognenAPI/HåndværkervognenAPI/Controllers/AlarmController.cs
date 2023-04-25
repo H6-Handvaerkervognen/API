@@ -16,7 +16,11 @@ namespace HåndværkervognenAPI.Controllers
         }
 
 
-
+        /// <summary>
+        /// Get request that gets info on specific alarm form alarmManager
+        /// </summary>
+        /// <param name="AppId"></param>
+        /// <returns>AlarmInfoDto alarmInfo</returns>
         [HttpGet(Name = "GetAlarmInfo")]
         public IActionResult GetAlarmInfo(string AppId)
         {
@@ -28,6 +32,11 @@ namespace HåndværkervognenAPI.Controllers
             return Ok(alarmInfo);
         }
 
+        /// <summary>
+        /// post request that takes alarmid and deletes all parrings connected to it
+        /// </summary>
+        /// <param name="AlarmID"></param>
+        /// <returns></returns>
         [HttpPost(Name = "DeleteParring")]
         public IActionResult DeleteParring(string AlarmID)
         {
@@ -37,6 +46,12 @@ namespace HåndværkervognenAPI.Controllers
             }
             return BadRequest();
         }
+
+        /// <summary>
+        /// post request that takes alarmid and notyfies users and change a field in the database
+        /// </summary>
+        /// <param name="AlarmID"></param>
+        /// <returns></returns>
         [HttpPost(Name = "ActivateAlarm")]
         public IActionResult ActivateAlarm(string AlarmID)
         {
