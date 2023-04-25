@@ -16,7 +16,7 @@ CREATE TABLE [Alarms]
 	[EndTime] VARCHAR(200), -- encrypted
 	[Name] VARCHAR(200), -- encrypted
 	[AlarmOn] BIT,
-	[Salt] VARCHAR(200)
+	[Salt] VARBINARY(200)
 )
 
 CREATE TABLE [Pairs]
