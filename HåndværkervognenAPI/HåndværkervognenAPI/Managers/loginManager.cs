@@ -1,6 +1,7 @@
 ﻿using HåndværkervognenAPI.Database;
 using HåndværkervognenAPI.Models;
 using HåndværkervognenAPI.Security;
+using System.Text;
 
 namespace HåndværkervognenAPI.Managers
 {
@@ -22,9 +23,9 @@ namespace HåndværkervognenAPI.Managers
         public bool AuthorizeLogin(LoginCredentials loginCredentials)
         {
             UserDal user = database.GetUser(loginCredentials.Username);
-            var hashPassword = hashing.GenerateHash(loginCredentials.Password, user.Salt).ToString();
+            byte[] hashPassword = hashing.GenerateHash(loginCredentials.Password, user.Salt);
 
-            if (hashPassword == loginCredentials.Password)
+            if (Encoding.ASCII.GetString(hashPassword) == user.HashPassword)
             {
                 return true;
             }
@@ -39,8 +40,8 @@ namespace HåndværkervognenAPI.Managers
         public void RegisterUser(LoginCredentials loginCredentials)
         {
             var salt = hashing.GenerateSalt();
-            var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt).ToString();
-            UserDal user = new UserDal(loginCredentials.Username, hashPassword, salt);
+            var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt);
+            UserDal user = new UserDal(loginCredentials.Username, Encoding.ASCII.GetString(hashPassword), salt);
             database.CreateUser(user);
         }
     }

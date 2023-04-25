@@ -1,6 +1,6 @@
 ﻿namespace HåndværkervognenAPI.Notifiacation
 {
-    public interface INotifiaction
+    public interface INotification
     {
          Task SendNotificationAsync(string alarmId);
     }
