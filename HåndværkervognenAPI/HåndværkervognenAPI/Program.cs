@@ -1,4 +1,7 @@
 
+using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
+using Google.Apis.Auth.OAuth2;
 using HåndværkervognenAPI.Database;
 using HåndværkervognenAPI.Managers;
 using HåndværkervognenAPI.Notifiacation;
@@ -12,6 +15,7 @@ namespace HåndværkervognenAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
             builder.Services.AddScoped<ILoginService, loginManager>();
             builder.Services.AddScoped<IAppService, AppManager>();
@@ -19,7 +23,7 @@ namespace HåndværkervognenAPI
             builder.Services.AddScoped<IDatabase, DataManager>();
             builder.Services.AddScoped<IHashing, Hasher>();
             builder.Services.AddScoped<IEncryption, RSAEncrypter>();
-            builder.Services.AddScoped<INotifiaction, FcmNotification>();
+            builder.Services.AddScoped<INotification, FcmNotification>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -39,6 +43,10 @@ namespace HåndværkervognenAPI
 
             app.UseAuthorization();
 
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = GoogleCredential.FromFile("private_key.json")
+            });            
 
             app.MapControllers();
 

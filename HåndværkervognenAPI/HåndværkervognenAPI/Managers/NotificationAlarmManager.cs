@@ -10,20 +10,20 @@ namespace HåndværkervognenAPI.Managers
     {
         private IDatabase _database;
         private IEncryption _encryption;
-        private INotifiaction _notifiaction;
+        private INotification _notification;
 
-        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotifiaction notifiaction)
+        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotification notification)
         {
             _database = database;
             _encryption = encryption;
-            _notifiaction = notifiaction;
+            _notification = notification;
         }
 
         public bool AlertUser(string alarmId)
         {
             try
             {
-                _notifiaction.SendNotificationAsync(alarmId);
+                _notification.SendNotificationAsync(alarmId);
             }
             catch (Exception)
             {
