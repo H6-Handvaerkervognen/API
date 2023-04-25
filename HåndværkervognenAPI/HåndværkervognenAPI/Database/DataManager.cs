@@ -8,17 +8,27 @@ namespace HåndværkervognenAPI.Database
     {
         //SERVER
         //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
-        string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Trusted_Connection=True;";
+        
+        string _connString = "Server=NANNA-STATIONÆR;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
 
+        /// <summary>
+        /// Creates a new command, changes the type to stored procedure and sets the commandtext 
+        /// </summary>
+        /// <param name="procedure">name of the procedure to execute</param>
         private void CommandCreate(string procedure)
         {
             _sqlCommand = _sqlConnection.CreateCommand();
             _sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
             _sqlCommand.CommandText = procedure;
         }
+
+        /// <summary>
+        /// Inserts a new user in the database
+        /// </summary>
+        /// <param name="user">the user to create</param>
         public void CreateUser(UserDal user)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -32,6 +42,11 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
+        /// <summary>
+        /// Deletes a pairing from the database
+        /// </summary>
+        /// <param name="alarmId">the id of the alarm</param>
+        /// <param name="username">the username</param>
         public void DeletePairing(string alarmId, string username)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -44,6 +59,10 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
+        /// <summary>
+        /// Deletes a user from the database
+        /// </summary>
+        /// <param name="username">username of the user to delete</param>
         public void DeleteUser(string username)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -55,6 +74,11 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
+        /// <summary>
+        /// Get the info on an alaarm from the database
+        /// </summary>
+        /// <param name="alarmId">the id of the alarm to get info on</param>
+        /// <returns></returns>
         public AlarmDal GetAlarmInfo(string alarmId)
         {
             AlarmDal alarm;
@@ -73,6 +97,11 @@ namespace HåndværkervognenAPI.Database
             return null;
         }
 
+        /// <summary>
+        /// Gets all the alarms associated with a user
+        /// </summary>
+        /// <param name="appId">the user</param>
+        /// <returns></returns>
         public List<AlarmDal> GetAlarms(string appId)
         {
             List<AlarmDal> alarms = new List<AlarmDal>();
@@ -92,6 +121,11 @@ namespace HåndværkervognenAPI.Database
             return alarms;
         }
 
+        /// <summary>
+        /// Retrieves a user from the daatabase from a usename
+        /// </summary>
+        /// <param name="username">username of the user to get</param>
+        /// <returns></returns>
         public UserDal GetUser(string username)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -110,6 +144,11 @@ namespace HåndværkervognenAPI.Database
             return null;
         }
 
+        /// <summary>
+        /// Adds a user and alarm pair to the database
+        /// </summary>
+        /// <param name="appID">the username of the user</param>
+        /// <param name="alarmInfo">the id of the alarm</param>
         public void PairAlarms(string appID, AlarmDal alarmInfo)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -126,6 +165,10 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
+        /// <summary>
+        /// Updates the field in the database that indicates whether the alarm is on, to off
+        /// </summary>
+        /// <param name="alarmId"></param>
         public void StopAlarm(string alarmId)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -138,6 +181,11 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
+        /// <summary>
+        /// Updates an alarms active hours
+        /// </summary>
+        /// <param name="appId">username</param>
+        /// <param name="alarmDal">The alarm to update</param>
         public void UpdateTimespan(string appId, AlarmDal alarmDal)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -151,6 +199,11 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
+
+        /// <summary>
+        /// Updates the field in the database that indicates whether the alarm is on, to on
+        /// </summary>
+        /// <param name="alarmId">the id of the alarm to update</param>
         public void StartAlarm(string alarmId)
         {
             using (_sqlConnection = new SqlConnection(_connString))

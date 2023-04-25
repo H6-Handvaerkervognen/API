@@ -34,7 +34,7 @@ namespace HåndværkervognenAPI.Controllers
         public IActionResult GetAlarms(string AppID)
         {
             var alarms = _appService.GetAlarms(AppID);
-            if (alarms == null || alarms.Count >= 0)
+            if (alarms == null || alarms.Count <= 0)
             {
                 return NotFound();
             }

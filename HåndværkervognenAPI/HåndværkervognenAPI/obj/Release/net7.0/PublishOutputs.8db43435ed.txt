@@ -7,6 +7,7 @@ C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenA
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\PubTmp\Out\HåndværkervognenAPI.pdb
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\PubTmp\Out\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\PubTmp\Out\Microsoft.OpenApi.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\PubTmp\Out\PBKDF2.NET.dll
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
