@@ -2,6 +2,7 @@
 using HåndværkervognenAPI.Models;
 using HåndværkervognenAPI.Security;
 using System.Security.Cryptography.Xml;
+using System.Text;
 
 namespace HåndværkervognenAPI.Managers
 {
@@ -49,12 +50,12 @@ namespace HåndværkervognenAPI.Managers
 
                 if (DBData != null)
                 {
-                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), _hashing.GenerateHash(info.AlarmInfo.AlarmId, DBData.Salt).ToString(), _encryption.EncryptData(info.AlarmInfo.Name));
+                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, DBData.Salt)), _encryption.EncryptData(info.AlarmInfo.Name));
                     _database.PairAlarms(info.AppId, alarmDal);
                     return true;
                 }
                 byte[] newSalt = _hashing.GenerateSalt();
-                alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), _hashing.GenerateHash(info.AlarmInfo.AlarmId, newSalt).ToString(), _encryption.EncryptData(info.AlarmInfo.Name));
+                alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()),_encryption.EncryptData(info.AlarmInfo.EndTime), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, newSalt)), _encryption.EncryptData(info.AlarmInfo.Name));
 
 
                 _database.PairAlarms(info.AppId, alarmDal);
