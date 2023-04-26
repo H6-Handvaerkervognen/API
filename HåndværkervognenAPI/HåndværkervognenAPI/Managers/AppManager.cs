@@ -42,11 +42,32 @@ namespace HåndværkervognenAPI.Managers
         /// <returns></returns>
         public bool PairAlarm(PairInfo info)
         {
-            //convert to alarmDal and hash AlarmId
-           byte[] newSalt = _hashing.GenerateSalt();
-            // _database.PairAlarms(info.AppId, info.);
+            try
+            {
+                AlarmDal alarmDal;
+                AlarmDal DBData = _database.GetAlarmInfo(info.AlarmInfo.AlarmId);
 
-            return true;
+                if (DBData != null)
+                {
+                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), _hashing.GenerateHash(info.AlarmInfo.AlarmId, DBData.Salt).ToString(), _encryption.EncryptData(info.AlarmInfo.Name));
+                    _database.PairAlarms(info.AppId, alarmDal);
+                    return true;
+                }
+                byte[] newSalt = _hashing.GenerateSalt();
+                alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), _hashing.GenerateHash(info.AlarmInfo.AlarmId, newSalt).ToString(), _encryption.EncryptData(info.AlarmInfo.Name));
+
+
+                _database.PairAlarms(info.AppId, alarmDal);
+
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+
         }
 
         /// <summary>
@@ -68,12 +89,24 @@ namespace HåndværkervognenAPI.Managers
         /// <returns></returns>
         public bool UpdateTimeSpan(string appId, AlarmInfoDto alarmInfo)
         {
-           
-            //todo hash alarmId
 
+<<<<<<< Updated upstream
             AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()),alarmInfo.AlarmId, alarmInfo.Name);
             _database.UpdateTimespan(appId, alarm);
             return true;
+=======
+            
+
+            var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
+            if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
+            {
+                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()), _hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString(), _encryption.EncryptData(alarmInfo.Name));
+                _database.UpdateTimespan(AppId, alarm);
+                return true;
+            }
+            return false;
+            
+>>>>>>> Stashed changes
         }
     }
 }
