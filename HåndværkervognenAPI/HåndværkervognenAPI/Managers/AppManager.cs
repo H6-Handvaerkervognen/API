@@ -37,7 +37,7 @@ namespace HåndværkervognenAPI.Managers
         }
 
         /// <summary>
-        /// creates a new salt for alarmid if its the first time the alarm is paired. the n is hashes the alarm id and encrypts the rest of the data and stores it 
+        /// creates a new salt for alarmid if its the first time the alarm is paired. then it hashes the alarm id and encrypts the rest of the data and stores it 
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>

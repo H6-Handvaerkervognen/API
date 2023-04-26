@@ -40,6 +40,7 @@ namespace HåndværkervognenAPI.Controllers
 
         }
 
+
         /// <summary>
         /// Get request for getting all alarms that belongs to a specific user
         /// </summary>
@@ -104,7 +105,6 @@ namespace HåndværkervognenAPI.Controllers
                 }
                 return NotFound();
             }
-
             
             return BadRequest();
         }
