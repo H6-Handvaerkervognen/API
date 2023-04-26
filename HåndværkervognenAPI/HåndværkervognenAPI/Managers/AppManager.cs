@@ -96,7 +96,7 @@ namespace HåndværkervognenAPI.Managers
             var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
             if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
             {
-                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()), _hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString(), _encryption.EncryptData(alarmInfo.Name));
+                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt)), _encryption.EncryptData(alarmInfo.Name));
                 _database.UpdateTimespan(username, alarm);
                 return true;
             }
