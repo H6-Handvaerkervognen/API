@@ -1,5 +1,4 @@
 ﻿using HåndværkervognenAPI.Database;
-using HåndværkervognenAPI.Model;
 using HåndværkervognenAPI.Models;
 using HåndværkervognenAPI.Notifiacation;
 using HåndværkervognenAPI.Security;
