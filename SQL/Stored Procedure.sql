@@ -1,3 +1,10 @@
+CREATE OR ALTER PROCEDURE CheckIfUserExists @Username VARCHAR(20)
+AS
+	SELECT ISNULL(
+	(SELECT 1 FROM Users
+	WHERE Username = @Username ), 0) as UserExists
+GO
+
 -- Creates a new user
 CREATE OR ALTER PROCEDURE CreateUser @Username VARCHAR(20), @Password VARCHAR(200), @Salt VARBINARY(200)
 AS
@@ -39,7 +46,9 @@ GO
 -- Gets info on an alarm by alarm id
 CREATE OR ALTER PROCEDURE GetAlarmInfo @AlarmId VARCHAR(20)
 AS
-	SELECT * FROM [Alarms] WHERE [Id] = @AlarmId;
+	SELECT ISNULL(
+	(SELECT 1 FROM Alarms S
+	WHERE Id = @AlarmId ), 0) as AlarmExists;
 GO
 
 -- Gets the time that specifies the active hours of the alarm

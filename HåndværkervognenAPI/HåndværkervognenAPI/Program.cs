@@ -17,7 +17,7 @@ namespace HåndværkervognenAPI
 
 
             // Add services to the container.
-            builder.Services.AddScoped<ILoginService, loginManager>();
+            builder.Services.AddScoped<ILoginService, LoginManager>();
             builder.Services.AddScoped<IAppService, AppManager>();
             builder.Services.AddScoped<IAlarmService, NotificationAlarmManager>();
             builder.Services.AddScoped<IDatabase, DataManager>();

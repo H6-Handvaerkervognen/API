@@ -1,4 +1,4 @@
-﻿using HåndværkervognenAPI.Model;
+﻿using HåndværkervognenAPI.Models;
 
 namespace HåndværkervognenAPI.Managers
 {

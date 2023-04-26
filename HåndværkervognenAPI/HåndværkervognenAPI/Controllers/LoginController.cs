@@ -6,7 +6,7 @@ namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class LoginController:ControllerBase
+    public class LoginController : ControllerBase
     {
         private ILoginService loginService;
 
@@ -14,7 +14,7 @@ namespace HåndværkervognenAPI.Controllers
         {
             this.loginService = loginService;
         }
-        
+
         /// <summary>
         /// post request for logging into the app
         /// </summary>
@@ -23,8 +23,12 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "Login")]
         public IActionResult Login(LoginCredentials loginCredentials)
         {
-            loginService.AuthorizeLogin(loginCredentials);
-            return Ok(true);
+            bool result = loginService.AuthorizeLogin(loginCredentials);
+            if (result)
+            {
+                return Ok(true);
+            }
+            return BadRequest();
         }
 
         /// <summary>
@@ -35,8 +39,11 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "CreateNewUser")]
         public IActionResult CreateNewUser(LoginCredentials loginCredentials)
         {
-        loginService.RegisterUser(loginCredentials);
-            return Created("api/Login/CreateNewUser", loginCredentials);
+            if (loginService.RegisterUser(loginCredentials))
+            {
+                return Created("api/Login/CreateNewUser", loginCredentials);
+            }
+            return BadRequest("A user with that username already exists. Login or choose a new username");
         }
 
         /// <summary>

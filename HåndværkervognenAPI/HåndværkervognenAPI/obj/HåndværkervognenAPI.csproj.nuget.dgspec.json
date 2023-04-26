@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dehli\\OneDrive\\Documents\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj": {}
+    "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dehli\\OneDrive\\Documents\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj": {
+    "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dehli\\OneDrive\\Documents\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
+        "projectUniqueName": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
         "projectName": "HåndværkervognenAPI",
-        "projectPath": "C:\\Users\\dehli\\OneDrive\\Documents\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
-        "packagesPath": "C:\\Users\\dehli\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dehli\\OneDrive\\Documents\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\obj\\",
+        "projectPath": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
+        "packagesPath": "C:\\Users\\nann8059\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\dehli\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nann8059\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -80,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,7 +1,5 @@
-﻿
-using HåndværkervognenAPI.Managers;
-using HåndværkervognenAPI.Model;
-
+﻿using HåndværkervognenAPI.Managers;
+using HåndværkervognenAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -26,7 +24,7 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "UpdateTimespan")]
         public IActionResult UpdateTimespan(PairInfo pairInfo)
         {
-            bool response = _appService.UpdateTimeSpan(pairInfo.AppId, pairInfo.AlarmInfo);
+            bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
             if (response)
             {
                 return Ok();
@@ -38,12 +36,12 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// Get request for getting all alarms that belongs to a specific user
         /// </summary>
-        /// <param name="AppID"></param>
+        /// <param name="username"></param>
         /// <returns>list of alrms</returns>
         [HttpGet(Name = "GetAlarms")]
-        public IActionResult GetAlarms(string AppID)
+        public IActionResult GetAlarms(string username)
         {
-            var alarms = _appService.GetAlarms(AppID);
+            var alarms = _appService.GetAlarms(username);
             if (alarms == null || alarms.Count <= 0)
             {
                 return NotFound();

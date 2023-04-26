@@ -1,6 +1,6 @@
-﻿using HåndværkervognenAPI.Model;
-using HåndværkervognenAPI.Models;
+﻿using HåndværkervognenAPI.Models;
 using System.Data.SqlClient;
+using System.Security.Claims;
 
 namespace HåndværkervognenAPI.Database
 {
@@ -8,7 +8,7 @@ namespace HåndværkervognenAPI.Database
     {
         //SERVER
         //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
-        
+
         string _connString = "Server=NANNA-STATIONÆR;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
@@ -24,6 +24,8 @@ namespace HåndværkervognenAPI.Database
             _sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
             _sqlCommand.CommandText = procedure;
         }
+
+
 
         /// <summary>
         /// Inserts a new user in the database
@@ -90,7 +92,10 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
+                    if ((int)_sqlDataReader["AlarmExists"] == 0)
+                    {
+                        alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
+                    }
                 }
                 _sqlDataReader.Close();
             }
@@ -100,15 +105,15 @@ namespace HåndværkervognenAPI.Database
         /// <summary>
         /// Gets all the alarms associated with a user
         /// </summary>
-        /// <param name="appId">the user</param>
+        /// <param name="username">the user</param>
         /// <returns></returns>
-        public List<AlarmDal> GetAlarms(string appId)
+        public List<AlarmDal> GetAlarms(string username)
         {
             List<AlarmDal> alarms = new List<AlarmDal>();
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("GetAlarmsByUser");
-                _sqlCommand.Parameters.AddWithValue("Username", appId);
+                _sqlCommand.Parameters.AddWithValue("Username", username);
                 _sqlCommand.Connection.Open();
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
@@ -147,14 +152,14 @@ namespace HåndværkervognenAPI.Database
         /// <summary>
         /// Adds a user and alarm pair to the database
         /// </summary>
-        /// <param name="appID">the username of the user</param>
+        /// <param name="username">the username of the user</param>
         /// <param name="alarmInfo">the id of the alarm</param>
-        public void PairAlarms(string appID, AlarmDal alarmInfo)
+        public void PairAlarms(string username, AlarmDal alarmInfo)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("AddPair");
-                _sqlCommand.Parameters.AddWithValue("Username", appID);
+                _sqlCommand.Parameters.AddWithValue("Username", username);
                 _sqlCommand.Parameters.AddWithValue("AlarmId", alarmInfo.AlarmId);
                 _sqlCommand.Parameters.AddWithValue("StartTime", alarmInfo.StartTime);
                 _sqlCommand.Parameters.AddWithValue("EndTime", alarmInfo.EndTime);
@@ -184,9 +189,9 @@ namespace HåndværkervognenAPI.Database
         /// <summary>
         /// Updates an alarms active hours
         /// </summary>
-        /// <param name="appId">username</param>
+        /// <param name="username">username</param>
         /// <param name="alarmDal">The alarm to update</param>
-        public void UpdateTimespan(string appId, AlarmDal alarmDal)
+        public void UpdateTimespan(string username, AlarmDal alarmDal)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
@@ -214,6 +219,27 @@ namespace HåndværkervognenAPI.Database
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
+        }
+        /// <summary>
+        /// Checks to see if a user with the username exists in the database
+        /// </summary>
+        /// <param name="username">Username to check for</param>
+        /// <returns>True if user with the username exists, false if user doesn't exists</returns>
+        public bool CheckIfUserExists(string username)
+        {
+            CommandCreate("CheckIfUserExists");
+            _sqlCommand.Parameters.AddWithValue("Username", username);
+            _sqlCommand.Connection.Open();
+            _sqlDataReader = _sqlCommand.ExecuteReader();
+            while (_sqlDataReader.Read())
+            {
+                if ((int)_sqlDataReader["UserExists"] == 0)
+                {
+                    return false;
+                }
+            }
+            _sqlDataReader.Close();
+            return true;
         }
     }
 }

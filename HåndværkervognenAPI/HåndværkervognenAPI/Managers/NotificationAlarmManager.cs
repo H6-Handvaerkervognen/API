@@ -9,9 +9,9 @@ namespace HåndværkervognenAPI.Managers
     {
         private IDatabase _database;
         private IEncryption _encryption;
-        private INotifiaction _notifiaction;
+        private INotification _notifiaction;
 
-        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotifiaction notifiaction)
+        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotification notifiaction)
         {
             _database = database;
             _encryption = encryption;

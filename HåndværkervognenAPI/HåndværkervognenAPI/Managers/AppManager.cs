@@ -21,11 +21,11 @@ namespace HåndværkervognenAPI.Managers
         /// <summary>
         /// calls database and gets alarms for aspecific user and converts from alarmDal to alarminfoDTO before returning a list of alarminfoDTO
         /// </summary>
-        /// <param name="AppId"></param>
+        /// <param name="username"></param>
         /// <returns>list of alarminfoDTO</returns>
-        public List<AlarmInfoDto> GetAlarms(string appId)
+        public List<AlarmInfoDto> GetAlarms(string username)
         {
-           List<AlarmDal> alarms = _database.GetAlarms(appId);
+           List<AlarmDal> alarms = _database.GetAlarms(username);
             List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
             foreach (AlarmDal alarm in alarms)
             {
@@ -63,16 +63,16 @@ namespace HåndværkervognenAPI.Managers
         /// <summary>
         /// converts the data to the rigth objects and saves the new timespan
         /// </summary>
-        /// <param name="AppId"></param>
+        /// <param name="username"></param>
         /// <param name="alarmInfo"></param>
         /// <returns></returns>
-        public bool UpdateTimeSpan(string appId, AlarmInfoDto alarmInfo)
+        public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo)
         {
            
             //todo hash alarmId
 
             AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()),alarmInfo.AlarmId, alarmInfo.Name);
-            _database.UpdateTimespan(appId, alarm);
+            _database.UpdateTimespan(username, alarm);
             return true;
         }
     }

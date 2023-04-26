@@ -5,20 +5,18 @@ using System.Text;
 
 namespace HåndværkervognenAPI.Managers
 {
-    public class loginManager : ILoginService
+    public class LoginManager : ILoginService
     {
         private IDatabase _database;
         private IHashing _hashing;
 
 
 
-        public loginManager(IDatabase database, IHashing hashing)
+        public LoginManager(IDatabase database, IHashing hashing)
         {
             _database = database;
             _hashing = hashing;
         }
-
-      
 
         public bool AuthorizeLogin(LoginCredentials loginCredentials)
         {
@@ -34,15 +32,20 @@ namespace HåndværkervognenAPI.Managers
 
         public void DeleteUser(string username)
         {
-            database.DeleteUser(username);
+            _database.DeleteUser(username);
         }
 
-        public void RegisterUser(LoginCredentials loginCredentials)
+        public bool RegisterUser(LoginCredentials loginCredentials)
         {
-            var salt = _hashing.GenerateSalt();
-            var hashPassword = _hashing.GenerateHash(loginCredentials.Password, salt);
-            UserDal user = new UserDal(loginCredentials.Username, Encoding.ASCII.GetString(hashPassword), salt);
-            _database.CreateUser(user);
+            if (_database.CheckIfUserExists(loginCredentials.Username))
+            {
+                var salt = _hashing.GenerateSalt();
+                var hashPassword = _hashing.GenerateHash(loginCredentials.Password, salt);
+                UserDal user = new UserDal(loginCredentials.Username, Encoding.ASCII.GetString(hashPassword), salt);
+                _database.CreateUser(user);
+                return true;
+            }
+            return false;
         }
     }
 }

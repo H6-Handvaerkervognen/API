@@ -1,5 +1,5 @@
 ﻿using HåndværkervognenAPI.Managers;
-using HåndværkervognenAPI.Model;
+using HåndværkervognenAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HåndværkervognenAPI.Controllers
@@ -19,12 +19,12 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// Get request that gets info on specific alarm form alarmManager
         /// </summary>
-        /// <param name="AppId"></param>
+        /// <param name="username"></param>
         /// <returns>AlarmInfoDto alarmInfo</returns>
         [HttpGet(Name = "GetAlarmInfo")]
-        public IActionResult GetAlarmInfo(string AppId)
+        public IActionResult GetAlarmInfo(string username)
         {
-           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(AppId);
+           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(username);
             if (alarmInfo==null)
             {
                 return BadRequest();
@@ -35,12 +35,13 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// post request that takes alarmid and deletes all parrings connected to it
         /// </summary>
-        /// <param name="AlarmID"></param>
+        /// <param name="alarmID"></param>
         /// <returns></returns>
         [HttpPost(Name = "DeleteParring")]
-        public IActionResult DeleteParring(string AlarmID)
+        public IActionResult DeleteParring(string alarmID, string username)
         {
-            if (_alarmService.DeletePairing(AlarmID))
+            //MANGLER USERNAME
+            if (_alarmService.DeletePairing(alarmID, username))
             {
                 return Ok();
             }

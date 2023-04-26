@@ -1,4 +1,4 @@
-﻿namespace HåndværkervognenAPI.Model
+﻿namespace HåndværkervognenAPI.Models
 {
     public class AlarmInfoDto
     {
