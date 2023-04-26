@@ -18,16 +18,17 @@ namespace HåndværkervognenAPI.Managers
             _hashing = hashing;
         }
 
-        public bool AuthorizeLogin(LoginCredentials loginCredentials)
+        public string AuthorizeLogin(LoginCredentials loginCredentials)
         {
             UserDal user = _database.GetUser(loginCredentials.Username);
             byte[] hashPassword = _hashing.GenerateHash(loginCredentials.Password, user.Salt);
-
+            string token = user.Token;
+            
             if (Encoding.ASCII.GetString(hashPassword) == user.HashPassword)
             {
-                return true;
+                return token;
             }
-            else return false;
+            else return "Error";
         }
 
         public void DeleteUser(string username)
@@ -41,7 +42,7 @@ namespace HåndværkervognenAPI.Managers
             {
                 var salt = _hashing.GenerateSalt();
                 var hashPassword = _hashing.GenerateHash(loginCredentials.Password, salt);
-                UserDal user = new UserDal(loginCredentials.Username, Encoding.ASCII.GetString(hashPassword), salt);
+                UserDal user = new(loginCredentials.Username, Encoding.ASCII.GetString(hashPassword), salt,Guid.NewGuid().ToString());
                 _database.CreateUser(user);
                 return true;
             }

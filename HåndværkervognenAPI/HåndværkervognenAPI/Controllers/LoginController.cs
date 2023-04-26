@@ -15,6 +15,7 @@ namespace HåndværkervognenAPI.Controllers
             this.loginService = loginService;
         }
 
+
         /// <summary>
         /// post request for logging into the app
         /// </summary>
@@ -23,13 +24,15 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "Login")]
         public IActionResult Login(LoginCredentials loginCredentials)
         {
-            if (loginService.AuthorizeLogin(loginCredentials))
+            var token = loginService.AuthorizeLogin(loginCredentials);
+            if (token!= "Error")
             {
                 //returnToken
-                return Ok(true);
+                return Ok(token);
             }
             return BadRequest();
         }
+
 
         /// <summary>
         /// post request for registering in the app
@@ -45,6 +48,7 @@ namespace HåndværkervognenAPI.Controllers
             }
             return BadRequest("A user with that username already exists. Login or choose a new username");
         }
+
 
         /// <summary>
         /// post request for deleteing a account

@@ -9,7 +9,7 @@ namespace HåndværkervognenAPI.Database
         //SERVER
         //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
 
-        string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Trusted_Connection=True;";
+        string _connString = "Server=localhost;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
@@ -141,7 +141,8 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    UserDal user = new UserDal(_sqlDataReader.GetString(0), _sqlDataReader.GetString(1), (byte[])_sqlDataReader["salt"]);
+                    //remove ""
+                    UserDal user = new UserDal(_sqlDataReader.GetString(0), _sqlDataReader.GetString(1), (byte[])_sqlDataReader["salt"], "");
                     return user;
                 }
                 _sqlDataReader.Close();
