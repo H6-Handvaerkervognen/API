@@ -1,37 +1,107 @@
 ﻿using HåndværkervognenAPI.Database;
-using HåndværkervognenAPI.Model;
+using HåndværkervognenAPI.Models;
+using HåndværkervognenAPI.Security;
+using System.Security.Cryptography.Xml;
+using System.Text;
 
 namespace HåndværkervognenAPI.Managers
 {
     public class AppManager : IAppService
     {
         private IDatabase _database;
+        private IEncryption _encryption;
+        private IHashing _hashing;
 
-        public IDatabase DataBase
+        public AppManager(IDatabase database, IEncryption encryption,IHashing hashing)
         {
-            get { return _database; }
-            set { _database = value; }
+            _database= database;
+            _encryption = encryption;
+            _hashing = hashing;
         }
 
-
-        public List<AlarmInfoDto> GetAlarms(string AppId)
+        /// <summary>
+        /// calls database and gets alarms for aspecific user and converts from alarmDal to alarminfoDTO before returning a list of alarminfoDTO
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns>list of alarminfoDTO</returns>
+        public List<AlarmInfoDto> GetAlarms(string username)
         {
-            throw new NotImplementedException();
+           List<AlarmDal> alarms = _database.GetAlarms(username);
+            List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
+            foreach (AlarmDal alarm in alarms)
+            {
+                alarmInfoDtos.Add(new AlarmInfoDto(TimeSpan.Parse(_encryption.DecryptData(alarm.StartTime)), TimeSpan.Parse(_encryption.DecryptData(alarm.EndTime)), alarm.AlarmId, _encryption.DecryptData(alarm.Name)));
+             
+            }
+            return alarmInfoDtos;
         }
 
-        public void PairAlarm(PairInfo info)
+        /// <summary>
+        /// creates a new salt for alarmid if its the first time the alarm is paired. the n is hashes the alarm id and encrypts the rest of the data and stores it 
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public bool PairAlarm(PairInfo info)
         {
-            throw new NotImplementedException();
+            try
+            {
+                AlarmDal alarmDal;
+                AlarmDal DBData = _database.GetAlarmInfo(info.AlarmInfo.AlarmId);
+
+                if (DBData != null)
+                {
+                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, DBData.Salt)), _encryption.EncryptData(info.AlarmInfo.Name));
+                    _database.PairAlarms(info.Username, alarmDal);
+                    return true;
+                }
+                byte[] newSalt = _hashing.GenerateSalt();
+                alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()),_encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, newSalt)), _encryption.EncryptData(info.AlarmInfo.Name));
+
+
+                _database.PairAlarms(info.Username, alarmDal);
+
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+
         }
 
-        public void StopAlarm(string AlarmId)
+        /// <summary>
+        /// stops a specific alarm
+        /// </summary>
+        /// <param name="AlarmId"></param>
+        /// <returns></returns>
+        public bool StopAlarm(string alarmId)
         {
-            throw new NotImplementedException();
+            _database.StopAlarm(alarmId);
+            return true;
         }
 
-        public void UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo)
+        /// <summary>
+        /// converts the data to the rigth objects and saves the new timespan
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="alarmInfo"></param>
+        /// <returns></returns>
+        public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo)
         {
-            throw new NotImplementedException();
+
+
+
+            var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
+            if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
+            {
+                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt)), _encryption.EncryptData(alarmInfo.Name));
+                _database.UpdateTimespan(username, alarm);
+                return true;
+            }
+            return false;
+            
         }
     }
 }

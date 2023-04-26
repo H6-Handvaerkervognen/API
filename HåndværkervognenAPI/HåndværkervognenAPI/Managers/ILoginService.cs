@@ -1,9 +1,11 @@
-﻿namespace HåndværkervognenAPI.Managers
+﻿using HåndværkervognenAPI.Models;
+
+namespace HåndværkervognenAPI.Managers
 {
     public interface ILoginService
     {
-        bool AuthorizeLogin(string username, string password);
-        void RegisterUser(string username, string password);
-        void DeleteUser(string uid);
+        bool AuthorizeLogin(LoginCredentials loginCredentials);
+        bool RegisterUser(LoginCredentials loginCredentials);
+        void DeleteUser(string username);
     }
 }

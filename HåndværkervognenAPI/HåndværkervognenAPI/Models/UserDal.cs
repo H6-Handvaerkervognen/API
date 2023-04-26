@@ -8,21 +8,9 @@
 
 		private byte[] salt;
 
-		public string UserName
-		{
-			get { return username; }
-			set { username = value; }
-		}
-        public string HashPassword
-        {
-            get { return hashPassword; }
-            set { hashPassword = value; }
-        }
-        public byte[] Salt
-        {
-            get { return salt; }
-            set { salt = value; }
-        }
+		public string UserName { get; private set; }
+        public string HashPassword { get; private set; }
+        public byte[] Salt { get; private set; }
 
         public UserDal(string userName, string hashPassword, byte[] salt)
         {

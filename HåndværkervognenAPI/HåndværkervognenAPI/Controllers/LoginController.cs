@@ -1,27 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HåndværkervognenAPI.Managers;
+using HåndværkervognenAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class LoginController
+    [Route("[controller]/[action]")]
+    public class LoginController : ControllerBase
     {
-     
+        private ILoginService loginService;
 
+        public LoginController(ILoginService loginService)
+        {
+            this.loginService = loginService;
+        }
+
+        /// <summary>
+        /// post request for logging into the app
+        /// </summary>
+        /// <param name="loginCredentials"></param>
+        /// <returns></returns>
         [HttpPost(Name = "Login")]
-        public bool Login(string username, string pass)
+        public IActionResult Login(LoginCredentials loginCredentials)
         {
-            return true;
+            bool result = loginService.AuthorizeLogin(loginCredentials);
+            if (result)
+            {
+                return Ok(true);
+            }
+            return BadRequest();
         }
+
+        /// <summary>
+        /// post request for registering in the app
+        /// </summary>
+        /// <param name="loginCredentials"></param>
+        /// <returns></returns>
         [HttpPost(Name = "CreateNewUser")]
-        public void CreateNewUser(string username, string pass)
+        public IActionResult CreateNewUser(LoginCredentials loginCredentials)
         {
-     
+            if (loginService.RegisterUser(loginCredentials))
+            {
+                return Created("api/Login/CreateNewUser", loginCredentials);
+            }
+            return BadRequest("A user with that username already exists. Login or choose a new username");
         }
+
+        /// <summary>
+        /// post request for deleteing a account
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         [HttpPost(Name = "DeleteUser")]
-        public void DeleteUser(string username, string pass)
+        public IActionResult DeleteUser(string username)
         {
-            
+            loginService.DeleteUser(username);
+            return Ok();
         }
     }
 }

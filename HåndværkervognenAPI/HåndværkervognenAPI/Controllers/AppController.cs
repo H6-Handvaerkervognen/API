@@ -1,30 +1,84 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HåndværkervognenAPI.Managers;
+using HåndværkervognenAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class AppController
+    [Route("api/[controller]/[action]")]
+    public class AppController : ControllerBase
     {
+        private IAppService _appService;
+
+        public AppController(IAppService appService)
+        {
+            _appService = appService;
+        }
+
+        /// <summary>
+        /// post request for updateing timespan for a specific alarm
+        /// </summary>
+        /// <param name="pairInfo"></param>
+        /// <returns></returns>
         [HttpPost(Name = "UpdateTimespan")]
-        public void UpdateTimespan(string AppID)
+        public IActionResult UpdateTimespan(PairInfo pairInfo)
         {
-           
-        }
-        [HttpGet(Name = "DeleteParring")]
-        public void GetAlarms(string AppID)
-        {
+            bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest();
 
         }
+
+        /// <summary>
+        /// Get request for getting all alarms that belongs to a specific user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns>list of alrms</returns>
+        [HttpGet(Name = "GetAlarms")]
+        public IActionResult GetAlarms(string username)
+        {
+            var alarms = _appService.GetAlarms(username);
+            if (alarms == null || alarms.Count <= 0)
+            {
+                return NotFound();
+            }
+            return Ok(alarms);
+        }
+
+        /// <summary>
+        /// post request for parring of alarm and user
+        /// </summary>
+        /// <param name="pairInfo"></param>
+        /// <returns></returns>
         [HttpPost(Name = "PairAlarm")]
-        public void PairAlarm(string AlarmID)
+        public IActionResult PairAlarm(PairInfo pairInfo)
         {
-
+            bool response = _appService.PairAlarm(pairInfo);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
-        [HttpPost(Name = "StopAlarm")]
-        public void StopAlarm(string AlarmID)
-        {
 
+        /// <summary>
+        /// post request for stopping an alrm from the app
+        /// </summary>
+        /// <param name="AlarmID"></param>
+        /// <returns></returns>
+        [HttpPost(Name = "StopAlarm")]
+        public IActionResult StopAlarm(string AlarmID)
+        {
+            bool response = _appService.StopAlarm(AlarmID);
+            if (response)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

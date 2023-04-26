@@ -1,12 +1,12 @@
-﻿using HåndværkervognenAPI.Model;
+﻿using HåndværkervognenAPI.Models;
 
 namespace HåndværkervognenAPI.Managers
 {
     public interface IAppService
     {
-        void UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo);
-        void PairAlarm(PairInfo info);
-        List<AlarmInfoDto>GetAlarms(string AppId);
-        void StopAlarm(string AlarmId);
+        bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo);
+        bool PairAlarm(PairInfo info);
+        List<AlarmInfoDto>GetAlarms(string username);
+        bool StopAlarm(string alarmId);
     }
 }
