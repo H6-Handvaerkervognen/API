@@ -51,12 +51,12 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// post request that takes alarmid and notyfies users and change a field in the database
         /// </summary>
-        /// <param name="AlarmID"></param>
+        /// <param name="alarmID"></param>
         /// <returns></returns>
         [HttpPost(Name = "ActivateAlarm")]
-        public IActionResult ActivateAlarm(string AlarmID)
+        public IActionResult ActivateAlarm(string alarmID)
         {
-            if (_alarmService.AlertUser(AlarmID))
+            if (_alarmService.AlertUser(alarmID))
             {
                 return Ok();
             }

@@ -9,7 +9,7 @@ namespace HåndværkervognenAPI.Database
         //SERVER
         //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
 
-        string _connString = "Server=NANNA-STATIONÆR;Database=haandvaerkervognen;Trusted_Connection=True;";
+        string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
@@ -227,19 +227,23 @@ namespace HåndværkervognenAPI.Database
         /// <returns>True if user with the username exists, false if user doesn't exists</returns>
         public bool CheckIfUserExists(string username)
         {
-            CommandCreate("CheckIfUserExists");
-            _sqlCommand.Parameters.AddWithValue("Username", username);
-            _sqlCommand.Connection.Open();
-            _sqlDataReader = _sqlCommand.ExecuteReader();
-            while (_sqlDataReader.Read())
+            using (_sqlConnection = new SqlConnection(_connString))
             {
-                if ((int)_sqlDataReader["UserExists"] == 0)
+                CommandCreate("CheckIfUserExists");
+                _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
                 {
-                    return false;
+                    if ((int)_sqlDataReader["UserExists"] == 1)
+                    {
+                        return false;
+                    }
                 }
+                _sqlDataReader.Close();
             }
-            _sqlDataReader.Close();
             return true;
+
         }
     }
 }

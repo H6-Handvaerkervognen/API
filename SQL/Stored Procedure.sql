@@ -25,7 +25,7 @@ AS
 GO
 
 -- Adds a pair between a user and an alarm (and inserts the alarm info in alarm table)
-CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200), @Salt VARCHAR(200)
+CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200), @Salt VARBINARY(200)
 AS
 	IF NOT EXISTS(SELECT * FROM [Alarms] WHERE [Id] = @AlarmId)
 	BEGIN

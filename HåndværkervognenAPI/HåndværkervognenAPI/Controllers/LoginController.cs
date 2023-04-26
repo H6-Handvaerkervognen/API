@@ -23,8 +23,7 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "Login")]
         public IActionResult Login(LoginCredentials loginCredentials)
         {
-            bool result = loginService.AuthorizeLogin(loginCredentials);
-            if (result)
+            if (loginService.AuthorizeLogin(loginCredentials))
             {
                 //returnToken
                 return Ok(true);
