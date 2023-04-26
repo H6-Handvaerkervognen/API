@@ -1,5 +1,4 @@
 ﻿using HåndværkervognenAPI.Database;
-using HåndværkervognenAPI.Model;
 using HåndværkervognenAPI.Models;
 using HåndværkervognenAPI.Security;
 using System.Security.Cryptography.Xml;
@@ -24,9 +23,9 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="AppId"></param>
         /// <returns>list of alarminfoDTO</returns>
-        public List<AlarmInfoDto> GetAlarms(string AppId)
+        public List<AlarmInfoDto> GetAlarms(string appId)
         {
-           List<AlarmDal> alarms = _database.GetAlarms(AppId);
+           List<AlarmDal> alarms = _database.GetAlarms(appId);
             List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
             foreach (AlarmDal alarm in alarms)
             {
@@ -55,9 +54,9 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="AlarmId"></param>
         /// <returns></returns>
-        public bool StopAlarm(string AlarmId)
+        public bool StopAlarm(string alarmId)
         {
-            _database.StopAlarm(AlarmId);
+            _database.StopAlarm(alarmId);
             return true;
         }
 
@@ -67,13 +66,13 @@ namespace HåndværkervognenAPI.Managers
         /// <param name="AppId"></param>
         /// <param name="alarmInfo"></param>
         /// <returns></returns>
-        public bool UpdateTimeSpan(string AppId, AlarmInfoDto alarmInfo)
+        public bool UpdateTimeSpan(string appId, AlarmInfoDto alarmInfo)
         {
            
             //todo hash alarmId
 
             AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()),alarmInfo.AlarmId, alarmInfo.Name);
-            _database.UpdateTimespan(AppId, alarm);
+            _database.UpdateTimespan(appId, alarm);
             return true;
         }
     }
