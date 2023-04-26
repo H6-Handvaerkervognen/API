@@ -17,12 +17,12 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         /// <summary>
-        /// post request for updateing timespan for a specific alarm
+        /// Patch request for updateing timespan for a specific alarm
         /// </summary>
         /// <param name="pairInfo"></param>
         /// <returns></returns>
-        [HttpPost(Name = "UpdateTimespan")]
-        public IActionResult UpdateTimespan(PairInfo pairInfo)
+        [HttpPatch(Name = "UpdateAlarmInfo")]
+        public IActionResult UpdateAlarmInfo(PairInfo pairInfo)
         {
             bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
             if (response)
@@ -37,7 +37,7 @@ namespace HåndværkervognenAPI.Controllers
         /// Get request for getting all alarms that belongs to a specific user
         /// </summary>
         /// <param name="username"></param>
-        /// <returns>list of alrms</returns>
+        /// <returns>list of alarms</returns>
         [HttpGet(Name = "GetAlarms")]
         public IActionResult GetAlarms(string username)
         {
@@ -60,7 +60,7 @@ namespace HåndværkervognenAPI.Controllers
             bool response = _appService.PairAlarm(pairInfo);
             if (response)
             {
-                return Ok();
+                return Created("",pairInfo.AlarmInfo);
             }
             return BadRequest();
         }

@@ -22,9 +22,9 @@ namespace HåndværkervognenAPI.Controllers
         /// <param name="username"></param>
         /// <returns>AlarmInfoDto alarmInfo</returns>
         [HttpGet(Name = "GetAlarmInfo")]
-        public IActionResult GetAlarmInfo(string username)
+        public IActionResult GetAlarmInfo(string AlarmId)
         {
-           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(username);
+           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(AlarmId);
             if (alarmInfo==null)
             {
                 return BadRequest();

@@ -26,6 +26,7 @@ namespace HåndværkervognenAPI.Controllers
             bool result = loginService.AuthorizeLogin(loginCredentials);
             if (result)
             {
+                //returnToken
                 return Ok(true);
             }
             return BadRequest();
