@@ -146,3 +146,4 @@ C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenA
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Debug\net7.0\HåndværkervognenAPI.genruntimeconfig.cache
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Debug\net7.0\ref\HåndværkervognenAPI.dll
 C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Debug\net7.0\private_key.json
+C:\programming\BioVeg_App\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Debug\net7.0\private_key.json

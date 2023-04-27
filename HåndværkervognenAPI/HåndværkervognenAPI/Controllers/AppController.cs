@@ -1,12 +1,13 @@
 ﻿using HåndværkervognenAPI.Managers;
 using HåndværkervognenAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Primitives;
+using System.Net.Http.Headers;
 
 namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("[controller]/[action]")]
     public class AppController : ControllerBase
     {
         private IAppService _appService;
@@ -24,14 +25,21 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPatch(Name = "UpdateAlarmInfo")]
         public IActionResult UpdateAlarmInfo(PairInfo pairInfo)
         {
-            bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
-            if (response)
+            Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (headerValue != "")
             {
-                return Ok();
+                bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
+                if (response)
+                {
+                    return Ok();
+                }
+                return NotFound();
+
             }
             return BadRequest();
 
         }
+
 
         /// <summary>
         /// Get request for getting all alarms that belongs to a specific user
@@ -41,12 +49,19 @@ namespace HåndværkervognenAPI.Controllers
         [HttpGet(Name = "GetAlarms")]
         public IActionResult GetAlarms(string username)
         {
-            var alarms = _appService.GetAlarms(username);
-            if (alarms == null || alarms.Count <= 0)
+            Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (headerValue != "")
             {
-                return NotFound();
+                var alarms = _appService.GetAlarms(username);
+                if (alarms == null || alarms.Count <= 0)
+                {
+                    return NotFound();
+                }
+                return Ok(alarms);
+                
             }
-            return Ok(alarms);
+            return BadRequest();
+            
         }
 
         /// <summary>
@@ -57,11 +72,17 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "PairAlarm")]
         public IActionResult PairAlarm(PairInfo pairInfo)
         {
-            bool response = _appService.PairAlarm(pairInfo);
-            if (response)
+            Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (headerValue != "")
             {
-                return Created("",pairInfo.AlarmInfo);
+                bool response = _appService.PairAlarm(pairInfo);
+                if (response)
+                {
+                    return Created("", pairInfo.AlarmInfo);
+                }
+                return NotFound();
             }
+            
             return BadRequest();
         }
 
@@ -73,11 +94,18 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "StopAlarm")]
         public IActionResult StopAlarm(string AlarmID)
         {
-            bool response = _appService.StopAlarm(AlarmID);
-            if (response)
+            
+            Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (headerValue !="")
             {
-                return Ok();
+                bool response = _appService.StopAlarm(AlarmID);
+                if (response)
+                {
+                    return Ok();
+                }
+                return NotFound();
             }
+            
             return BadRequest();
         }
     }
