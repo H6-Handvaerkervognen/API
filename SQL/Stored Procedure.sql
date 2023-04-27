@@ -30,7 +30,13 @@ CREATE OR ALTER PROCEDURE DeleteUser @Username VARCHAR(20)
 AS
 	DELETE FROM [Users] WHERE [Username] = @Username;
 GO
-
+-- CHECK PAIR EXISTS
+CREATE OR ALTER PROCEDURE CheckIfPairExists @Username VARCHAR(20), @AlarmId VARCHAR(20)
+AS
+	SELECT ISNULL(
+	(SELECT 1 FROM [Pairs]
+	WHERE [UserId] = @Username AND [AlarmId] = @AlarmId ), 0) as PairExists
+GO
 -- Adds a pair between a user and an alarm (and inserts the alarm info in alarm table)
 CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200)
 AS
