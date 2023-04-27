@@ -19,7 +19,7 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         /// <summary>
-        /// Patch request for updateing timespan for a specific alarm
+        /// Patch request for updating timespan for a specific alarm
         /// </summary>
         /// <param name="pairInfo"></param>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         /// <summary>
-        /// post request for parring of alarm and user
+        /// post request for pairng of alarm and user
         /// </summary>
         /// <param name="pairInfo"></param>
         /// <returns></returns>
@@ -83,7 +83,7 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         /// <summary>
-        /// post request for stopping an alrm from the app
+        /// post request for stopping an alarm from the app
         /// </summary>
         /// <param name="AlarmID"></param>
         /// <returns></returns>

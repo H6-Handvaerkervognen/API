@@ -78,7 +78,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Get the info on an alaarm from the database
+        /// Get the info on an alarm from the database
         /// </summary>
         /// <param name="alarmId">the id of the alarm to get info on</param>
         /// <returns></returns>
@@ -127,7 +127,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Retrieves a user from the daatabase from a usename
+        /// Retrieves a user from the database from a usename
         /// </summary>
         /// <param name="username">username of the user to get</param>
         /// <returns></returns>
@@ -170,7 +170,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Updates the field in the database that indicates whether the alarm is on, to off
+        /// Updates the field in the database that changes the state of the alarm to off
         /// </summary>
         /// <param name="alarmId"></param>
         public void StopAlarm(string alarmId)
@@ -205,7 +205,7 @@ namespace HåndværkervognenAPI.Database
 
 
         /// <summary>
-        /// Updates the field in the database that indicates whether the alarm is on, to on
+        /// Updates the field in the database that changes the state of the alarm to on
         /// </summary>
         /// <param name="alarmId">the id of the alarm to update</param>
         public void StartAlarm(string alarmId)
@@ -244,6 +244,12 @@ namespace HåndværkervognenAPI.Database
             return false;
         }
 
+        /// <summary>
+        /// Check if a user / alarm pairing exists
+        /// </summary>
+        /// <param name="alarmId">Id of the alarm</param>
+        /// <param name="username">Name of the owner of the alarm</param>
+        /// <returns></returns>
         public bool CheckIfPairExists(string alarmId, string username)
         {
             using (_sqlConnection = new SqlConnection(_connString))

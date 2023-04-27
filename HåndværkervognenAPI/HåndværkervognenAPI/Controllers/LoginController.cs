@@ -51,7 +51,7 @@ namespace HåndværkervognenAPI.Controllers
 
 
         /// <summary>
-        /// post request for deleteing a account
+        /// post request for deleting a account
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
