@@ -6,10 +6,17 @@ AS
 GO
 
 -- Creates a new user
-CREATE OR ALTER PROCEDURE CreateUser @Username VARCHAR(20), @Password VARCHAR(200), @Salt VARBINARY(200)
+CREATE OR ALTER PROCEDURE CreateUser @Username VARCHAR(20), @Password VARCHAR(200), @Salt VARBINARY(200), @Token VARCHAR(MAX)
 AS
-	INSERT INTO [Users]([Username], [Password], [Salt])
-	VALUES (@Username, @Password, @Salt);
+	INSERT INTO [Users]([Username], [Password], [Salt], [Token])
+	VALUES (@Username, @Password, @Salt, @Token);
+GO
+
+CREATE OR ALTER PROCEDURE CheckIfTokenExists @Token VARCHAR(MAX)
+AS
+	SELECT ISNULL(
+	(SELECT 1 FROM Users
+	WHERE [Token] = @Token ), 0) as TokenExists
 GO
 
 -- Gets a user by the username
