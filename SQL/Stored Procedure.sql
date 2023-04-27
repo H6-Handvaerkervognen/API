@@ -53,8 +53,14 @@ GO
 -- Gets info on an alarm by alarm id
 CREATE OR ALTER PROCEDURE GetAlarmInfo @AlarmId VARCHAR(20)
 AS
+	SELECT * FROM [Alarms] WHERE [Id] = @AlarmId;
+GO
+
+-- Checks if the alarm exists
+CREATE OR ALTER PROCEDURE CheckIfAlarmExists @AlarmId VARCHAR(20)
+AS
 	SELECT ISNULL(
-	(SELECT 1 FROM Alarms S
+	(SELECT 1 FROM Alarms
 	WHERE Id = @AlarmId ), 0) as AlarmExists;
 GO
 
