@@ -2,11 +2,6 @@
 {
     public class LoginCredentials
     {
-        private string username;
-
-        private string password;
-
-
         public string Username { get; private set; }
 
         public string Password { get; private set; }

@@ -7,7 +7,7 @@ namespace HåndværkervognenAPI.Database
         AlarmDal GetAlarmInfo(string alarmId);
         void PairAlarms(string username, AlarmDal alarmInfo);
         List<AlarmDal> GetAlarms(string username);
-        void UpdateTimespan(string username, AlarmDal alarmDal);
+        void UpdateAlarmInfo(string username, AlarmDal alarmDal);
         UserDal GetUser(string username);
         void CreateUser(UserDal user);
         void DeleteUser(string username);

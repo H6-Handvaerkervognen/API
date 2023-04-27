@@ -8,11 +8,11 @@ namespace HåndværkervognenAPI.Controllers
     [Route("[controller]/[action]")]
     public class LoginController : ControllerBase
     {
-        private ILoginService loginService;
+        private ILoginService _loginService;
 
         public LoginController(ILoginService loginService)
         {
-            this.loginService = loginService;
+            _loginService = loginService;
         }
 
 
@@ -24,8 +24,8 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "Login")]
         public IActionResult Login(LoginCredentials loginCredentials)
         {
-            var token = loginService.AuthorizeLogin(loginCredentials);
-            if (token!= "Error")
+            var token = _loginService.AuthorizeLogin(loginCredentials);
+            if (token != "Error")
             {
                 //returnToken
                 return Ok(token);
@@ -42,7 +42,7 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "CreateNewUser")]
         public IActionResult CreateNewUser(LoginCredentials loginCredentials)
         {
-            if (loginService.RegisterUser(loginCredentials))
+            if (_loginService.RegisterUser(loginCredentials))
             {
                 return Created("api/Login/CreateNewUser", loginCredentials);
             }
@@ -55,10 +55,10 @@ namespace HåndværkervognenAPI.Controllers
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        [HttpPost(Name = "DeleteUser")]
+        [HttpDelete(Name = "DeleteUser")]
         public IActionResult DeleteUser(string username)
         {
-            loginService.DeleteUser(username);
+            _loginService.DeleteUser(username);
             return Ok();
         }
     }

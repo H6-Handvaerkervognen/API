@@ -2,17 +2,6 @@
 {
     public class AlarmDal
     {
-		private string starTime;
-
-		private string endTime;
-
-		private string alarmId;
-
-		private string name;
-
-        private byte[] salt;
-
-
         public string StartTime { get; private set; }
 
         public string EndTime { get; private set; }

@@ -6,7 +6,7 @@ namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class AlarmController:ControllerBase
+    public class AlarmController : ControllerBase
     {
         private IAlarmService _alarmService;
 
@@ -24,10 +24,10 @@ namespace HåndværkervognenAPI.Controllers
         [HttpGet(Name = "GetAlarmInfo")]
         public IActionResult GetAlarmInfo(string alarmId)
         {
-           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
-            if (alarmInfo==null)
+            AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
+            if (alarmInfo == null)
             {
-                return BadRequest("No alarms for that user");
+                return NoContent();
             }
             return Ok(alarmInfo);
         }

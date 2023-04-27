@@ -10,17 +10,15 @@ namespace HåndværkervognenAPI.Managers
     {
         private IDatabase _database;
         private IEncryption _encryption;
-        private IHashing _hashing;
 
-        public AppManager(IDatabase database, IEncryption encryption, IHashing hashing)
+        public AppManager(IDatabase database, IEncryption encryption)
         {
             _database = database;
             _encryption = encryption;
-            _hashing = hashing;
         }
 
         /// <summary>
-        /// calls database and gets alarms for aspecific user and converts from alarmDal to alarminfoDTO before returning a list of alarminfoDTO
+        /// Gets alarms for a specific user and converts from alarmDal to alarminfoDTO before returning a list of alarminfoDTO
         /// </summary>
         /// <param name="username"></param>
         /// <returns>list of alarminfoDTO</returns>
@@ -36,7 +34,7 @@ namespace HåndværkervognenAPI.Managers
         }
 
         /// <summary>
-        /// creates a new salt for alarmid if its the first time the alarm is paired. then it hashes the alarm id and encrypts the rest of the data and stores it 
+        /// creates a new salt for alarmid if its the first time the alarm is paired. Encrypts the rest of the data and stores it
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
@@ -47,8 +45,11 @@ namespace HåndværkervognenAPI.Managers
                 AlarmDal alarmDal;
                 if (!_database.CheckIfPairExists(info.AlarmInfo.AlarmId, info.Username))
                 {
-
-                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId), _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId), info.AlarmInfo.AlarmId, _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
+                    alarmDal = new AlarmDal(
+                        _encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId),
+                        _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId),
+                        info.AlarmInfo.AlarmId,
+                        _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
                     _database.PairAlarms(info.Username, alarmDal);
 
                     return true;
@@ -73,22 +74,20 @@ namespace HåndværkervognenAPI.Managers
         }
 
         /// <summary>
-        /// converts the data to the rigth objects and saves the new timespan
+        /// converts the data into a <see cref="AlarmDal"/> and updates the new values
         /// </summary>
         /// <param name="username"></param>
         /// <param name="alarmInfo"></param>
         /// <returns></returns>
-        public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo)
+        public bool UpdateAlarmInfo(string username, AlarmInfoDto alarmInfo)
         {
-            var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
-            if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
-            {
-                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
-                _database.UpdateTimespan(username, alarm);
-                return true;
-            }
-            return false;
+            AlarmDal data = _database.GetAlarmInfo(alarmInfo.AlarmId);
+            if (data == null)
+                return false;
 
+            AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
+            _database.UpdateAlarmInfo(username, alarm);
+            return true;
         }
     }
 }

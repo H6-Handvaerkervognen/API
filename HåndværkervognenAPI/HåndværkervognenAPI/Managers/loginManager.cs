@@ -10,8 +10,6 @@ namespace HåndværkervognenAPI.Managers
         private IDatabase _database;
         private IHashing _hashing;
 
-
-
         public LoginManager(IDatabase database, IHashing hashing)
         {
             _database = database;

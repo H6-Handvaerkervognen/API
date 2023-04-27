@@ -9,13 +9,13 @@ namespace HåndværkervognenAPI.Managers
     {
         private IDatabase _database;
         private IEncryption _encryption;
-        private INotification _notifiaction;
+        private INotification _notification;
 
-        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotification notifiaction)
+        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotification notification)
         {
             _database = database;
             _encryption = encryption;
-            _notifiaction = notifiaction;
+            _notification = notification;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace HåndværkervognenAPI.Managers
         {
             try
             {
-                _notifiaction.SendNotificationAsync(alarmId);
+                _notification.SendNotificationAsync(alarmId);
                 _database.StartAlarm(alarmId);
             }
             catch (Exception)
@@ -53,7 +53,6 @@ namespace HåndværkervognenAPI.Managers
             }
             catch (Exception)
             {
-
                 return false;
             }
 
@@ -68,7 +67,11 @@ namespace HåndværkervognenAPI.Managers
         public AlarmInfoDto GetAlarmInfo(string alarmid)
         {
             AlarmDal alarmDal = _database.GetAlarmInfo(alarmid);
-            AlarmInfoDto alarmInfo = new AlarmInfoDto(_encryption.DecryptData(alarmDal.StartTime, alarmid), _encryption.DecryptData(alarmDal.EndTime, alarmid), alarmid, _encryption.DecryptData(alarmDal.Name, alarmid));
+            AlarmInfoDto alarmInfo = new AlarmInfoDto(
+                _encryption.DecryptData(alarmDal.StartTime, alarmid), 
+                _encryption.DecryptData(alarmDal.EndTime, alarmid), 
+                alarmid, 
+                _encryption.DecryptData(alarmDal.Name, alarmid));
             return alarmInfo;
         }
     }

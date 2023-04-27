@@ -26,19 +26,17 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPatch(Name = "UpdateAlarmInfo")]
         public IActionResult UpdateAlarmInfo(PairInfo pairInfo)
         {
-            Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue != "")
+            bool exists = Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (exists)
             {
-                bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
+                bool response = _appService.UpdateAlarmInfo(pairInfo.Username, pairInfo.AlarmInfo);
                 if (response)
                 {
                     return Ok();
                 }
                 return NotFound();
-
             }
-            return BadRequest();
-
+            return Unauthorized();
         }
 
 
@@ -50,8 +48,8 @@ namespace HåndværkervognenAPI.Controllers
         [HttpGet(Name = "GetAlarms")]
         public IActionResult GetAlarms(string username)
         {
-            Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue != "")
+            bool exists = Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (exists)
             {
                 var alarms = _appService.GetAlarms(username);
                 if (alarms == null || alarms.Count <= 0)
@@ -59,10 +57,8 @@ namespace HåndværkervognenAPI.Controllers
                     return NotFound();
                 }
                 return Ok(alarms);
-                
             }
-            return BadRequest();
-            
+            return Unauthorized();
         }
 
         /// <summary>
@@ -73,8 +69,8 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "PairAlarm")]
         public IActionResult PairAlarm(PairInfo pairInfo)
         {
-            Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue != "")
+            bool exists = Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (exists)
             {
                 bool response = _appService.PairAlarm(pairInfo);
                 if (response)
@@ -83,8 +79,7 @@ namespace HåndværkervognenAPI.Controllers
                 }
                 return NotFound("Pair already exists");
             }
-            
-            return BadRequest();
+            return Unauthorized();
         }
 
         /// <summary>
@@ -95,9 +90,8 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "StopAlarm")]
         public IActionResult StopAlarm(string AlarmID)
         {
-            
-            Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue !="")
+            bool exists = Request.Headers.TryGetValue("token", out StringValues headerValue);
+            if (exists)
             {
                 bool response = _appService.StopAlarm(AlarmID);
                 if (response)
@@ -106,8 +100,7 @@ namespace HåndværkervognenAPI.Controllers
                 }
                 return NotFound();
             }
-            
-            return BadRequest();
+            return Unauthorized();
         }
     }
 }

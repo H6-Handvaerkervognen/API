@@ -1304,19 +1304,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nann8059\\.nuget\\packages\\": {}
+    "C:\\Users\\seje_\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
+      "projectUniqueName": "C:\\Users\\seje_\\source\\repos\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
       "projectName": "HåndværkervognenAPI",
-      "projectPath": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
-      "packagesPath": "C:\\Users\\nann8059\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nann8059\\Documents\\GitHub\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\obj\\",
+      "projectPath": "C:\\Users\\seje_\\source\\repos\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\HåndværkervognenAPI.csproj",
+      "packagesPath": "C:\\Users\\seje_\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\seje_\\source\\repos\\API\\HåndværkervognenAPI\\HåndværkervognenAPI\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\nann8059\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\seje_\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1382,7 +1386,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   },
