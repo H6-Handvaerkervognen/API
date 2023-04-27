@@ -78,3 +78,13 @@ C:\Users\Nansy\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\
 C:\Users\Nansy\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\HåndværkervognenAPI.csproj.CopyComplete
 C:\Users\Nansy\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\HåndværkervognenAPI.genruntimeconfig.cache
 C:\Users\Nansy\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\obj\Release\net7.0\ref\HåndværkervognenAPI.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\private_key.json
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\FirebaseAdmin.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Google.Api.Gax.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Google.Api.Gax.Rest.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Google.Apis.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Google.Apis.Auth.PlatformServices.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Google.Apis.Auth.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Google.Apis.Core.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\nann8059\Documents\GitHub\API\HåndværkervognenAPI\HåndværkervognenAPI\bin\Release\net7.0\Newtonsoft.Json.dll

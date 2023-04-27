@@ -1,5 +1,5 @@
 ﻿using HåndværkervognenAPI.Managers;
-using HåndværkervognenAPI.Model;
+using HåndværkervognenAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HåndværkervognenAPI.Controllers
@@ -16,31 +16,47 @@ namespace HåndværkervognenAPI.Controllers
         }
 
 
-
+        /// <summary>
+        /// Get request that gets info on specific alarm form alarmManager
+        /// </summary>
+        /// <param name="alarmId"></param>
+        /// <returns>AlarmInfoDto alarmInfo</returns>
         [HttpGet(Name = "GetAlarmInfo")]
-        public IActionResult GetAlarmInfo(string AppId)
+        public IActionResult GetAlarmInfo(string alarmId)
         {
-           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(AppId);
+           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
             if (alarmInfo==null)
             {
-                return BadRequest();
+                return BadRequest("No alarms for that user");
             }
             return Ok(alarmInfo);
         }
 
+        /// <summary>
+        /// post request that takes alarmid and deletes all parrings connected to it
+        /// </summary>
+        /// <param name="alarmID"></param>
+        /// <returns></returns>
         [HttpPost(Name = "DeleteParring")]
-        public IActionResult DeleteParring(string AlarmID)
+        public IActionResult DeleteParring(string alarmID, string username)
         {
-            if (_alarmService.DeletePairing(AlarmID))
+            //MANGLER USERNAME
+            if (_alarmService.DeletePairing(alarmID, username))
             {
                 return Ok();
             }
             return BadRequest();
         }
+
+        /// <summary>
+        /// post request that takes alarmid and notyfies users and change a field in the database
+        /// </summary>
+        /// <param name="alarmID"></param>
+        /// <returns></returns>
         [HttpPost(Name = "ActivateAlarm")]
-        public IActionResult ActivateAlarm(string AlarmID)
+        public IActionResult ActivateAlarm(string alarmID)
         {
-            if (_alarmService.AlertUser(AlarmID))
+            if (_alarmService.AlertUser(alarmID))
             {
                 return Ok();
             }

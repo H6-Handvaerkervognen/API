@@ -17,7 +17,7 @@ namespace HåndværkervognenAPI
 
 
             // Add services to the container.
-            builder.Services.AddScoped<ILoginService, loginManager>();
+            builder.Services.AddScoped<ILoginService, LoginManager>();
             builder.Services.AddScoped<IAppService, AppManager>();
             builder.Services.AddScoped<IAlarmService, NotificationAlarmManager>();
             builder.Services.AddScoped<IDatabase, DataManager>();
@@ -28,7 +28,7 @@ namespace HåndværkervognenAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            
             //builder.Services.AddHttpClient<FcmSender>();
             var app = builder.Build();
 
@@ -39,6 +39,7 @@ namespace HåndværkervognenAPI
                 app.UseSwaggerUI();
             }
 
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

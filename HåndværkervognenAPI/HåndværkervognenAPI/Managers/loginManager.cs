@@ -5,44 +5,48 @@ using System.Text;
 
 namespace HåndværkervognenAPI.Managers
 {
-    public class loginManager : ILoginService
+    public class LoginManager : ILoginService
     {
-        private IDatabase database;
-        private IHashing hashing;
+        private IDatabase _database;
+        private IHashing _hashing;
 
 
 
-        public loginManager(IDatabase database, IHashing hashing)
+        public LoginManager(IDatabase database, IHashing hashing)
         {
-            this.database = database;
-            this.hashing = hashing;
+            _database = database;
+            _hashing = hashing;
         }
 
-      
-
-        public bool AuthorizeLogin(LoginCredentials loginCredentials)
+        public string AuthorizeLogin(LoginCredentials loginCredentials)
         {
-            UserDal user = database.GetUser(loginCredentials.Username);
-            byte[] hashPassword = hashing.GenerateHash(loginCredentials.Password, user.Salt);
-
+            UserDal user = _database.GetUser(loginCredentials.Username);
+            byte[] hashPassword = _hashing.GenerateHash(loginCredentials.Password, user.Salt);
+            string token = user.Token;
+            
             if (Encoding.ASCII.GetString(hashPassword) == user.HashPassword)
             {
-                return true;
+                return token;
             }
-            else return false;
+            else return "Error";
         }
 
         public void DeleteUser(string username)
         {
-            database.DeleteUser(username);
+            _database.DeleteUser(username);
         }
 
-        public void RegisterUser(LoginCredentials loginCredentials)
+        public bool RegisterUser(LoginCredentials loginCredentials)
         {
-            var salt = hashing.GenerateSalt();
-            var hashPassword = hashing.GenerateHash(loginCredentials.Password, salt);
-            UserDal user = new UserDal(loginCredentials.Username, Encoding.ASCII.GetString(hashPassword), salt);
-            database.CreateUser(user);
+            if (!_database.CheckIfUserExists(loginCredentials.Username))
+            {
+                var salt = _hashing.GenerateSalt();
+                var hashPassword = _hashing.GenerateHash(loginCredentials.Password, salt);
+                UserDal user = new(loginCredentials.Username, Encoding.ASCII.GetString(hashPassword), salt,Guid.NewGuid().ToString());
+                _database.CreateUser(user);
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -1,3 +1,4 @@
+-- Run this line first
 CREATE DATABASE haandvaerkervognen;
 
 USE haandvaerkervognen;
@@ -6,7 +7,8 @@ CREATE TABLE [Users]
 (
 	[Username] VARCHAR(20) PRIMARY KEY,
 	[Password] VARCHAR(200) NOT NULL,
-	[Salt] VARBINARY(200) NOT NULL
+	[Salt] VARBINARY(200) NOT NULL,
+	[Token] VARCHAR(MAX) NOT NULL
 )
 
 CREATE TABLE [Alarms]
@@ -16,7 +18,6 @@ CREATE TABLE [Alarms]
 	[EndTime] VARCHAR(200), -- encrypted
 	[Name] VARCHAR(200), -- encrypted
 	[AlarmOn] BIT,
-	[Salt] VARBINARY(200)
 )
 
 CREATE TABLE [Pairs]

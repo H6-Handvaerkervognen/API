@@ -1,8 +1,22 @@
--- Creates a new user
-CREATE OR ALTER PROCEDURE CreateUser @Username VARCHAR(20), @Password VARCHAR(200), @Salt VARBINARY(200)
+CREATE OR ALTER PROCEDURE CheckIfUserExists @Username VARCHAR(20)
 AS
-	INSERT INTO [Users]([Username], [Password], [Salt])
-	VALUES (@Username, @Password, @Salt);
+	SELECT ISNULL(
+	(SELECT 1 FROM Users
+	WHERE Username = @Username ), 0) as UserExists
+GO
+
+-- Creates a new user
+CREATE OR ALTER PROCEDURE CreateUser @Username VARCHAR(20), @Password VARCHAR(200), @Salt VARBINARY(200), @Token VARCHAR(MAX)
+AS
+	INSERT INTO [Users]([Username], [Password], [Salt], [Token])
+	VALUES (@Username, @Password, @Salt, @Token);
+GO
+
+CREATE OR ALTER PROCEDURE CheckIfTokenExists @Token VARCHAR(MAX)
+AS
+	SELECT ISNULL(
+	(SELECT 1 FROM Users
+	WHERE [Token] = @Token ), 0) as TokenExists
 GO
 
 -- Gets a user by the username
@@ -16,14 +30,20 @@ CREATE OR ALTER PROCEDURE DeleteUser @Username VARCHAR(20)
 AS
 	DELETE FROM [Users] WHERE [Username] = @Username;
 GO
-
+-- CHECK PAIR EXISTS
+CREATE OR ALTER PROCEDURE CheckIfPairExists @Username VARCHAR(20), @AlarmId VARCHAR(20)
+AS
+	SELECT ISNULL(
+	(SELECT 1 FROM [Pairs]
+	WHERE [UserId] = @Username AND [AlarmId] = @AlarmId ), 0) as PairExists
+GO
 -- Adds a pair between a user and an alarm (and inserts the alarm info in alarm table)
-CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200), @Salt VARCHAR(200)
+CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200)
 AS
 	IF NOT EXISTS(SELECT * FROM [Alarms] WHERE [Id] = @AlarmId)
 	BEGIN
-	INSERT INTO [Alarms]([Id], [StartTime], [EndTime], [Name], [Salt])
-	VALUES (@AlarmId, @StartTime, @EndTime, @Name, @Salt);
+	INSERT INTO [Alarms]([Id], [StartTime], [EndTime], [Name])
+	VALUES (@AlarmId, @StartTime, @EndTime, @Name);
 	END
 
 	INSERT INTO [Pairs]([UserId], [AlarmId])
