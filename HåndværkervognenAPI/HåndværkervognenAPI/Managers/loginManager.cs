@@ -38,7 +38,7 @@ namespace HåndværkervognenAPI.Managers
 
         public bool RegisterUser(LoginCredentials loginCredentials)
         {
-            if (_database.CheckIfUserExists(loginCredentials.Username))
+            if (!_database.CheckIfUserExists(loginCredentials.Username))
             {
                 var salt = _hashing.GenerateSalt();
                 var hashPassword = _hashing.GenerateHash(loginCredentials.Password, salt);

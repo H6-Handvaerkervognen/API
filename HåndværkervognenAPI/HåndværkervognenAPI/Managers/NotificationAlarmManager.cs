@@ -33,7 +33,7 @@ namespace HåndværkervognenAPI.Managers
             catch (Exception)
             {
 
-               return false;
+                return false;
 
             }
             return true;
@@ -49,14 +49,14 @@ namespace HåndværkervognenAPI.Managers
             //todo
             try
             {
-              _database.DeletePairing(alarmId, username);
+                _database.DeletePairing(alarmId, username);
             }
             catch (Exception)
             {
 
-               return false;
+                return false;
             }
-           
+
             return true;
         }
 
@@ -68,7 +68,7 @@ namespace HåndværkervognenAPI.Managers
         public AlarmInfoDto GetAlarmInfo(string alarmid)
         {
             AlarmDal alarmDal = _database.GetAlarmInfo(alarmid);
-            AlarmInfoDto alarmInfo = new AlarmInfoDto(TimeSpan.Parse( _encryption.DecryptData(alarmDal.StartTime)),TimeSpan.Parse( _encryption.DecryptData(alarmDal.EndTime)),alarmid, _encryption.DecryptData(alarmDal.Name));
+            AlarmInfoDto alarmInfo = new AlarmInfoDto(_encryption.DecryptData(alarmDal.StartTime, alarmid), _encryption.DecryptData(alarmDal.EndTime, alarmid), alarmid, _encryption.DecryptData(alarmDal.Name, alarmid));
             return alarmInfo;
         }
     }

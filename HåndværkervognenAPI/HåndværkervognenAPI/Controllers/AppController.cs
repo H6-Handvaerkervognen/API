@@ -3,6 +3,7 @@ using HåndværkervognenAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace HåndværkervognenAPI.Controllers
 {
@@ -78,9 +79,9 @@ namespace HåndværkervognenAPI.Controllers
                 bool response = _appService.PairAlarm(pairInfo);
                 if (response)
                 {
-                    return Created("", pairInfo.AlarmInfo);
+                    return Created("", pairInfo);
                 }
-                return NotFound();
+                return NotFound("Pair already exists");
             }
             
             return BadRequest();

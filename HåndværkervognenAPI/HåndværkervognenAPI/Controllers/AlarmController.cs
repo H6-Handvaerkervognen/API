@@ -19,15 +19,15 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// Get request that gets info on specific alarm form alarmManager
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="alarmId"></param>
         /// <returns>AlarmInfoDto alarmInfo</returns>
         [HttpGet(Name = "GetAlarmInfo")]
-        public IActionResult GetAlarmInfo(string AlarmId)
+        public IActionResult GetAlarmInfo(string alarmId)
         {
-           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(AlarmId);
+           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
             if (alarmInfo==null)
             {
-                return BadRequest();
+                return BadRequest("No alarms for that user");
             }
             return Ok(alarmInfo);
         }

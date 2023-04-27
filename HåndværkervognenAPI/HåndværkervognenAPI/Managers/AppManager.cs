@@ -12,9 +12,9 @@ namespace HåndværkervognenAPI.Managers
         private IEncryption _encryption;
         private IHashing _hashing;
 
-        public AppManager(IDatabase database, IEncryption encryption,IHashing hashing)
+        public AppManager(IDatabase database, IEncryption encryption, IHashing hashing)
         {
-            _database= database;
+            _database = database;
             _encryption = encryption;
             _hashing = hashing;
         }
@@ -26,12 +26,11 @@ namespace HåndværkervognenAPI.Managers
         /// <returns>list of alarminfoDTO</returns>
         public List<AlarmInfoDto> GetAlarms(string username)
         {
-           List<AlarmDal> alarms = _database.GetAlarms(username);
+            List<AlarmDal> alarms = _database.GetAlarms(username);
             List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
             foreach (AlarmDal alarm in alarms)
             {
-                alarmInfoDtos.Add(new AlarmInfoDto(TimeSpan.Parse(_encryption.DecryptData(alarm.StartTime)), TimeSpan.Parse(_encryption.DecryptData(alarm.EndTime)), alarm.AlarmId, _encryption.DecryptData(alarm.Name)));
-             
+                alarmInfoDtos.Add(new AlarmInfoDto(_encryption.DecryptData(alarm.StartTime, alarm.AlarmId), _encryption.DecryptData(alarm.EndTime, alarm.AlarmId), alarm.AlarmId, _encryption.DecryptData(alarm.Name, alarm.AlarmId)));
             }
             return alarmInfoDtos;
         }
@@ -46,29 +45,20 @@ namespace HåndværkervognenAPI.Managers
             try
             {
                 AlarmDal alarmDal;
-                AlarmDal DBData = _database.GetAlarmInfo(info.AlarmInfo.AlarmId);
-
-                if (DBData != null)
+                if (!_database.CheckIfPairExists(info.AlarmInfo.AlarmId, info.Username))
                 {
-                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, DBData.Salt)), _encryption.EncryptData(info.AlarmInfo.Name));
+
+                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId), _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId), info.AlarmInfo.AlarmId, _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
                     _database.PairAlarms(info.Username, alarmDal);
+
                     return true;
                 }
-                byte[] newSalt = _hashing.GenerateSalt();
-                alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()),_encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, newSalt)), _encryption.EncryptData(info.AlarmInfo.Name));
-
-
-                _database.PairAlarms(info.Username, alarmDal);
-
-                return true;
+                return false;
             }
             catch (Exception)
             {
-
                 return false;
             }
-
-
         }
 
         /// <summary>
@@ -90,18 +80,15 @@ namespace HåndværkervognenAPI.Managers
         /// <returns></returns>
         public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo)
         {
-
-
-
             var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
             if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
             {
-                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt)), _encryption.EncryptData(alarmInfo.Name));
+                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
                 _database.UpdateTimespan(username, alarm);
                 return true;
             }
             return false;
-            
+
         }
     }
 }

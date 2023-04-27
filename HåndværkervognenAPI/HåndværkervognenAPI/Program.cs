@@ -28,7 +28,7 @@ namespace HåndværkervognenAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            
             //builder.Services.AddHttpClient<FcmSender>();
             var app = builder.Build();
 
@@ -39,6 +39,7 @@ namespace HåndværkervognenAPI
                 app.UseSwaggerUI();
             }
 
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

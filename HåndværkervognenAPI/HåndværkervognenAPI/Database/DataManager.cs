@@ -7,7 +7,7 @@ namespace HåndværkervognenAPI.Database
     public class DataManager : IDatabase
     {
         //SERVER
-        //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
+        //string _connString = "Server=WIN-MBE1GM5TV9Q;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
 
         string _connString = "Server=localhost;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
@@ -39,6 +39,7 @@ namespace HåndværkervognenAPI.Database
                 _sqlCommand.Parameters.AddWithValue("Username", user.UserName);
                 _sqlCommand.Parameters.AddWithValue("Password", user.HashPassword);
                 _sqlCommand.Parameters.AddWithValue("Salt", user.Salt);
+                _sqlCommand.Parameters.AddWithValue("Token", user.Token);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
@@ -92,10 +93,9 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    if ((int)_sqlDataReader["AlarmExists"] == 0)
-                    {
-                        alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
-                    }
+
+                    alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
+
                 }
                 _sqlDataReader.Close();
             }
@@ -141,8 +141,7 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    //remove ""
-                    UserDal user = new UserDal(_sqlDataReader.GetString(0), _sqlDataReader.GetString(1), (byte[])_sqlDataReader["salt"], "");
+                    UserDal user = new UserDal(_sqlDataReader.GetString(0), _sqlDataReader.GetString(1), (byte[])_sqlDataReader["salt"], _sqlDataReader.GetString(3));
                     return user;
                 }
                 _sqlDataReader.Close();
@@ -165,7 +164,6 @@ namespace HåndværkervognenAPI.Database
                 _sqlCommand.Parameters.AddWithValue("StartTime", alarmInfo.StartTime);
                 _sqlCommand.Parameters.AddWithValue("EndTime", alarmInfo.EndTime);
                 _sqlCommand.Parameters.AddWithValue("Name", alarmInfo.Name);
-                _sqlCommand.Parameters.AddWithValue("Salt", alarmInfo.Salt);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
@@ -236,15 +234,35 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    if ((int)_sqlDataReader["UserExists"] == 1)
+                    if (_sqlDataReader.GetInt32(0) == 1)
                     {
-                        return false;
+                        return true;
                     }
                 }
                 _sqlDataReader.Close();
             }
-            return true;
+            return false;
+        }
 
+        public bool CheckIfPairExists(string alarmId, string username)
+        {
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("CheckIfPairExists");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
+                _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    if (_sqlDataReader.GetInt32(0) == 1)
+                    {
+                        return true;
+                    }
+                }
+                _sqlDataReader.Close();
+            }
+            return false;
         }
     }
 }

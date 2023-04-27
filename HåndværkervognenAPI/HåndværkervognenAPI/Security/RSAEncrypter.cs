@@ -6,18 +6,17 @@ namespace HåndværkervognenAPI.Security
 {
     public class RSAEncrypter : IEncryption
     {
-        private RSAParameters _publicKey;
-        private RSAParameters _privateKey;
-        private int keySize = 1024;
+        
+        const int keySize = 1024;
 
-        public void AssignNewKeys()
+        public void AssignNewKeys(string containerName)
         {
-            using (var rsa = new RSACryptoServiceProvider(keySize))
-            {
-                rsa.PersistKeyInCsp = false;
-                _publicKey = rsa.ExportParameters(false);
-                _privateKey = rsa.ExportParameters(true);
-            }
+            CspParameters cspParams = new CspParameters(1);
+            cspParams.KeyContainerName = containerName;
+            cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
+            cspParams.ProviderName = "Microsoft Strong Cryptographic Provider";
+
+            var rsa = new RSACryptoServiceProvider(cspParams) { PersistKeyInCsp = true };
         }
 
         /// <summary>
@@ -25,19 +24,18 @@ namespace HåndværkervognenAPI.Security
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string DecryptData(string data)
+        public string DecryptData(string data, string containerName)
         {
             byte[] cipherbytes;
 
-            using (var rsa = new RSACryptoServiceProvider(keySize))
-            {
-                rsa.PersistKeyInCsp = false;
-                rsa.ImportParameters(_publicKey);
+            CspParameters cspParameters = new CspParameters { KeyContainerName = containerName };
 
-                cipherbytes = rsa.Encrypt(Encoding.ASCII.GetBytes(data), true);
+            using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
+            {
+                cipherbytes = rsa.Decrypt(Encoding.ASCII.GetBytes(data), true);
             }
 
-            return cipherbytes.ToString();
+            return Encoding.ASCII.GetString(cipherbytes);
         }
 
         /// <summary>
@@ -45,18 +43,16 @@ namespace HåndværkervognenAPI.Security
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string EncryptData(string data)
+        public string EncryptData(string data, string containerName)
         {
             byte[] plain;
 
-            using (var rsa = new RSACryptoServiceProvider(keySize))
+            CspParameters cspParameters = new CspParameters { KeyContainerName = containerName };
+            using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
             {
-                rsa.PersistKeyInCsp = false;
-
-                rsa.ImportParameters(_privateKey);
-                plain = rsa.Decrypt(Encoding.ASCII.GetBytes(data), true);
+                plain = rsa.Encrypt(Encoding.ASCII.GetBytes(data), true);
             }
-            return plain.ToString();
+            return Encoding.ASCII.GetString(plain);
         }
     }
 }
