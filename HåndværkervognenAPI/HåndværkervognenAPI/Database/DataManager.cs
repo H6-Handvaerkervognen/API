@@ -1,18 +1,26 @@
 ﻿using HåndværkervognenAPI.Models;
 using System.Data.SqlClient;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 
 namespace HåndværkervognenAPI.Database
 {
     public class DataManager : IDatabase
     {
         //SERVER
-        //string _connString = "Server=WIN-MBE1GM5TV9Q;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
-
-        string _connString = "Server=localhost;Database=haandvaerkervognen;Trusted_Connection=True;";
+        //string _connString = _configuration.GetConnectionString("serverConn");
+        private readonly IConfiguration _configuration;
+        private string _connString;
+         
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
+
+        public DataManager(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _connString = _configuration.GetConnectionString("localConn");
+        }
 
         /// <summary>
         /// Creates a new command, changes the type to stored procedure and sets the commandtext 
