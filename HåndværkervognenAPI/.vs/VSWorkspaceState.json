@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\HåndværkervognenAPI",
-    "\\HåndværkervognenAPI\\Controllers",
     "\\HåndværkervognenAPI\\Database",
     "\\HåndværkervognenAPI\\Managers",
     "\\HåndværkervognenAPI\\Models"
   ],
-  "SelectedNode": "\\HåndværkervognenAPI.sln",
+  "SelectedNode": "\\HåndværkervognenAPI\\Models\\PairInfo.cs",
   "PreviewInSolutionExplorer": false
 }
