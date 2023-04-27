@@ -32,12 +32,12 @@ AS
 GO
 
 -- Adds a pair between a user and an alarm (and inserts the alarm info in alarm table)
-CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200), @Salt VARBINARY(200)
+CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200)
 AS
 	IF NOT EXISTS(SELECT * FROM [Alarms] WHERE [Id] = @AlarmId)
 	BEGIN
-	INSERT INTO [Alarms]([Id], [StartTime], [EndTime], [Name], [Salt])
-	VALUES (@AlarmId, @StartTime, @EndTime, @Name, @Salt);
+	INSERT INTO [Alarms]([Id], [StartTime], [EndTime], [Name])
+	VALUES (@AlarmId, @StartTime, @EndTime, @Name);
 	END
 
 	INSERT INTO [Pairs]([UserId], [AlarmId])
@@ -54,14 +54,6 @@ GO
 CREATE OR ALTER PROCEDURE GetAlarmInfo @AlarmId VARCHAR(20)
 AS
 	SELECT * FROM [Alarms] WHERE [Id] = @AlarmId;
-GO
-
--- Checks if the alarm exists
-CREATE OR ALTER PROCEDURE CheckIfAlarmExists @AlarmId VARCHAR(20)
-AS
-	SELECT ISNULL(
-	(SELECT 1 FROM Alarms
-	WHERE Id = @AlarmId ), 0) as AlarmExists;
 GO
 
 -- Gets the time that specifies the active hours of the alarm
