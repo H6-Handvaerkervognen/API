@@ -14,7 +14,8 @@ namespace HåndværkervognenAPI.Security
             CspParameters cspParams = new CspParameters(1);
             cspParams.KeyContainerName = containerName;
             cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
-            cspParams.ProviderName = "Microsoft Strong Cryptographic Provider";
+            //cspParams.ProviderName = "Microsoft Strong Cryptographic Provider";
+            cspParams.ProviderName = "Microsoft RSA Schannel Cryptographic Provider";
 
             var rsa = new RSACryptoServiceProvider(cspParams) { PersistKeyInCsp = true };
         }

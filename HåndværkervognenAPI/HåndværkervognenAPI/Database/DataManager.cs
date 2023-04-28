@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace HåndværkervognenAPI.Database
 {

@@ -40,7 +40,7 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public bool PairAlarm(PairInfo info)
+        public string PairAlarm(PairInfo info)
         {
             try
             {
@@ -51,13 +51,13 @@ namespace HåndværkervognenAPI.Managers
                     alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId), _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId), info.AlarmInfo.AlarmId, _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
                     _database.PairAlarms(info.Username, alarmDal);
 
-                    return true;
+                    return "Yes";
                 }
-                return false;
+                return "No";
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                return "InnerException: " + e.InnerException + ";\n Source: " + e.Source + ";\n Mesaage: " + e.Message + ";\n Stack trace: " + e.StackTrace + ";\n Data: " + e.Data + ";\n Help link: " + e.HelpLink + ";\n HResult: " + e.HResult;
             }
         }
 
