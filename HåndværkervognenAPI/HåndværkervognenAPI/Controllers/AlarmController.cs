@@ -39,10 +39,10 @@ namespace HåndværkervognenAPI.Controllers
         /// <param name="alarmID"></param>
         /// <returns></returns>
         [HttpPost(Name = "DeleteParring")]
-        public IActionResult DeleteParring(string alarmID, string username)
+        public IActionResult DeleteParring(string alarmID)
         {
             
-            if (_alarmService.DeletePairing(alarmID, username))
+            if (_alarmService.DeletePairing(alarmID))
             {
                 return Ok();
             }

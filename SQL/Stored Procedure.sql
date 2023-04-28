@@ -12,11 +12,11 @@ AS
 	VALUES (@Username, @Password, @Salt, @Token);
 GO
 
-CREATE OR ALTER PROCEDURE CheckIfTokenExists @Token VARCHAR(MAX)
+CREATE OR ALTER PROCEDURE CheckIfTokenExists @Token VARCHAR(MAX), @Username VARCHAR(40)
 AS
 	SELECT ISNULL(
 	(SELECT 1 FROM Users
-	WHERE [Token] = @Token ), 0) as TokenExists
+	WHERE [Token] = @Token AND [Username] = @Username ), 0) as TokenExists
 GO
 
 -- Gets a user by the username
