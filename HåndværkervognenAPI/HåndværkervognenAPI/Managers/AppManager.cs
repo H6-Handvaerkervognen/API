@@ -26,7 +26,9 @@ namespace HåndværkervognenAPI.Managers
         /// <returns>list of alarminfoDTO</returns>
         public List<AlarmInfoDto> GetAlarms(string username)
         {
+
             List<AlarmDal> alarms = _database.GetAlarms(username);
+
             List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
             foreach (AlarmDal alarm in alarms)
             {
@@ -47,7 +49,10 @@ namespace HåndværkervognenAPI.Managers
                 AlarmDal alarmDal;
                 if (!_database.CheckIfPairExists(info.AlarmInfo.AlarmId, info.Username))
                 {
-
+                    if (!_database.CheckIfAlarmExists(info.AlarmInfo.AlarmId))
+                    {
+                        _encryption.AssignNewKeys(info.AlarmInfo.AlarmId);
+                    }
                     alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId), _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId), info.AlarmInfo.AlarmId, _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
                     _database.PairAlarms(info.Username, alarmDal);
 
@@ -57,7 +62,7 @@ namespace HåndværkervognenAPI.Managers
             }
             catch (Exception e)
             {
-                return "InnerException: " + e.InnerException + ";\n Source: " + e.Source + ";\n Mesaage: " + e.Message + ";\n Stack trace: " + e.StackTrace + ";\n Data: " + e.Data + ";\n Help link: " + e.HelpLink + ";\n HResult: " + e.HResult;
+                return e.Message;
             }
         }
 
@@ -81,14 +86,14 @@ namespace HåndværkervognenAPI.Managers
         public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo)
         {
             var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
-            if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
+            if (alarmInfo.AlarmId == data.AlarmId)
             {
                 AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
                 _database.UpdateTimespan(username, alarm);
                 return true;
             }
-            return false;
 
+            return false;
         }
     }
 }

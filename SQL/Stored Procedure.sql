@@ -37,13 +37,21 @@ AS
 	(SELECT 1 FROM [Pairs]
 	WHERE [UserId] = @Username AND [AlarmId] = @AlarmId ), 0) as PairExists
 GO
+
+CREATE OR ALTER PROCEDURE CheckIfAlarmExists @AlarmId VARCHAR(200)
+AS
+	SELECT ISNULL(
+	(SELECT 1 FROM [Pairs]
+	WHERE [AlarmId] = @AlarmId ), 0) as PairExists
+GO
+
 -- Adds a pair between a user and an alarm (and inserts the alarm info in alarm table)
-CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARCHAR(200), @EndTime VARCHAR(200), @Name VARCHAR(200)
+CREATE OR ALTER PROCEDURE AddPair @Username VARCHAR(20), @AlarmId VARCHAR(20), @StartTime VARBINARY(max), @EndTime VARBINARY(max), @Name VARBINARY(max)
 AS
 	IF NOT EXISTS(SELECT * FROM [Alarms] WHERE [Id] = @AlarmId)
 	BEGIN
-	INSERT INTO [Alarms]([Id], [StartTime], [EndTime], [Name])
-	VALUES (@AlarmId, @StartTime, @EndTime, @Name);
+	INSERT INTO [Alarms]([Id], [StartTime], [EndTime], [Name], [AlarmOn])
+	VALUES (@AlarmId, @StartTime, @EndTime, @Name, 0);
 	END
 
 	INSERT INTO [Pairs]([UserId], [AlarmId])
@@ -51,7 +59,7 @@ AS
 GO
 
 -- Updates the active hours for an alarm
-CREATE OR ALTER PROCEDURE UpdateActiveHours @AlarmId VARCHAR(20), @StartTime TIME, @EndTime TIME
+CREATE OR ALTER PROCEDURE UpdateActiveHours @AlarmId VARCHAR(20), @StartTime VARBINARY(MAX), @EndTime VARBINARY(MAX)
 AS
 	UPDATE [Alarms] SET [StartTime] = @StartTime, [EndTime] = @EndTime WHERE [Id] = @AlarmId;
 GO
@@ -78,7 +86,7 @@ GO
 -- Gets all the alarms associated with a user
 CREATE OR ALTER PROCEDURE GetAlarmsByUser @Username VARCHAR(20)
 AS
-	SELECT * FROM [Alarms] JOIN [Pairs] on [UserId] = @Username where [UserId] = @Username;
+	SELECT * FROM [Alarms] join Pairs on AlarmId = Id WHERE [UserId] = @Username;
 GO
 
 -- Changes the AlarmON to indicate the alarm is stopped 

@@ -16,6 +16,7 @@ namespace HåndværkervognenAPI.Database
         void DeletePairing(string alarmId, string username);
         bool CheckIfUserExists(string username);
         bool CheckIfPairExists(string alarmId, string username);
+        bool CheckIfAlarmExists(string alarmId);
 
     }
 }

@@ -39,6 +39,7 @@ namespace HåndværkervognenAPI.Managers
             return true;
         }
 
+
         /// <summary>
         /// deletes the paring for a user
         /// </summary>
@@ -68,8 +69,12 @@ namespace HåndværkervognenAPI.Managers
         public AlarmInfoDto GetAlarmInfo(string alarmid)
         {
             AlarmDal alarmDal = _database.GetAlarmInfo(alarmid);
-            AlarmInfoDto alarmInfo = new AlarmInfoDto(_encryption.DecryptData(alarmDal.StartTime, alarmid), _encryption.DecryptData(alarmDal.EndTime, alarmid), alarmid, _encryption.DecryptData(alarmDal.Name, alarmid));
-            return alarmInfo;
+            if (alarmDal != null)
+            {
+                return new AlarmInfoDto(_encryption.DecryptData(alarmDal.StartTime, alarmid), _encryption.DecryptData(alarmDal.EndTime, alarmid), alarmid, _encryption.DecryptData(alarmDal.Name, alarmid));
+
+            }
+            return null;
         }
     }
 }

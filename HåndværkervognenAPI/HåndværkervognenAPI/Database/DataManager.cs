@@ -79,7 +79,8 @@ namespace HåndværkervognenAPI.Database
         /// <returns></returns>
         public AlarmDal GetAlarmInfo(string alarmId)
         {
-            AlarmDal alarm;
+            
+           
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("GetAlarmInfo");
@@ -88,12 +89,12 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-
-                    alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
-
+                   return new AlarmDal((byte[])_sqlDataReader["startTime"], (byte[])_sqlDataReader["endTime"], (string)_sqlDataReader["Id"], (byte[])_sqlDataReader["Name"]);
                 }
                 _sqlDataReader.Close();
+                
             }
+
             return null;
         }
 
@@ -113,7 +114,7 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    AlarmDal alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
+                    AlarmDal alarm = new AlarmDal((byte[])_sqlDataReader["startTime"], (byte[])_sqlDataReader["endTime"], (string)_sqlDataReader["Id"], (byte[])_sqlDataReader["Name"]);
                     alarms.Add(alarm);
                 }
                 _sqlDataReader.Close();
@@ -246,6 +247,26 @@ namespace HåndværkervognenAPI.Database
                 CommandCreate("CheckIfPairExists");
                 _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
                 _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    if (_sqlDataReader.GetInt32(0) == 1)
+                    {
+                        return true;
+                    }
+                }
+                _sqlDataReader.Close();
+            }
+            return false;
+        }
+
+        public bool CheckIfAlarmExists(string alarmId)
+        {
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("CheckIfAlarmExists");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
                 _sqlCommand.Connection.Open();
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())

@@ -2,26 +2,17 @@
 {
     public class AlarmDal
     {
-		private string starTime;
+		
 
-		private string endTime;
+        public byte[] StartTime { get; private set; }
 
-		private string alarmId;
-
-		private string name;
-
-        private byte[] salt;
-
-
-        public string StartTime { get; private set; }
-
-        public string EndTime { get; private set; }
+        public byte[] EndTime { get; private set; }
 
         public string AlarmId { get; private set; }
-        public string Name { get; private set; }
-        public byte[] Salt { get; private set; }
+        public byte[] Name { get; private set; }
+   
 
-        public AlarmDal(string startTime, string endTime, string alarmId, string name)
+        public AlarmDal(byte[] startTime, byte[] endTime, string alarmId, byte[] name)
         {
             StartTime = startTime;
             EndTime = endTime;

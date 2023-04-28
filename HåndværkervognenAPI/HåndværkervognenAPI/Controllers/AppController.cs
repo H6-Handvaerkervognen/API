@@ -95,7 +95,6 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "StopAlarm")]
         public IActionResult StopAlarm(string AlarmID)
         {
-            
             Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (headerValue !="")
             {

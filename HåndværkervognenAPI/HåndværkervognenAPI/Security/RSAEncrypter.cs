@@ -6,18 +6,16 @@ namespace HåndværkervognenAPI.Security
 {
     public class RSAEncrypter : IEncryption
     {
-        
-        const int keySize = 1024;
+        const int keySize = 2048;
 
         public void AssignNewKeys(string containerName)
         {
             CspParameters cspParams = new CspParameters(1);
-            cspParams.KeyContainerName = containerName;
+            cspParams.KeyContainerName = "kontainer";
             cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
-            //cspParams.ProviderName = "Microsoft Strong Cryptographic Provider";
-            cspParams.ProviderName = "Microsoft RSA Schannel Cryptographic Provider";
+            cspParams.ProviderName = "Microsoft Strong Cryptographic Provider";
 
-            var rsa = new RSACryptoServiceProvider(cspParams) { PersistKeyInCsp = true };
+            var rsa = new RSACryptoServiceProvider(keySize, cspParams) { PersistKeyInCsp = true };
         }
 
         /// <summary>
@@ -25,15 +23,19 @@ namespace HåndværkervognenAPI.Security
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string DecryptData(string data, string containerName)
+        public string DecryptData(byte[] data, string containerName)
         {
             byte[] cipherbytes;
 
-            CspParameters cspParameters = new CspParameters { KeyContainerName = containerName };
+            CspParameters cspParameters = new CspParameters
+            {
+                KeyContainerName = "kontainer"
+            };
 
             using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
             {
-                cipherbytes = rsa.Decrypt(Encoding.ASCII.GetBytes(data), true);
+                
+                cipherbytes = rsa.Decrypt(data, false);
             }
 
             return Encoding.ASCII.GetString(cipherbytes);
@@ -44,16 +46,21 @@ namespace HåndværkervognenAPI.Security
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public string EncryptData(string data, string containerName)
+        public byte[] EncryptData(string data, string containerName)
         {
             byte[] plain;
 
-            CspParameters cspParameters = new CspParameters { KeyContainerName = containerName };
+            CspParameters cspParameters = new CspParameters
+            {
+                KeyContainerName = "kontainer"
+            };
+
             using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
             {
-                plain = rsa.Encrypt(Encoding.ASCII.GetBytes(data), true);
+                
+                plain = rsa.Encrypt(Encoding.ASCII.GetBytes(data), false);
             }
-            return Encoding.ASCII.GetString(plain);
+            return plain;
         }
     }
 }

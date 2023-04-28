@@ -14,9 +14,9 @@ CREATE TABLE [Users]
 CREATE TABLE [Alarms]
 (
 	[Id] VARCHAR(200) PRIMARY KEY,
-	[StartTime] VARCHAR(200), -- encrypted
-	[EndTime] VARCHAR(200), -- encrypted
-	[Name] VARCHAR(200), -- encrypted
+	[StartTime] VARBINARY(MAX), -- encrypted
+	[EndTime] VARBINARY(MAX), -- encrypted
+	[Name] VARBINARY(MAX), -- encrypted
 	[AlarmOn] BIT,
 )
 
