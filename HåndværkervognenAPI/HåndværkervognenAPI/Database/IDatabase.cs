@@ -10,7 +10,7 @@ namespace HåndværkervognenAPI.Database
         void UpdateTimespan(string username, AlarmDal alarmDal);
         UserDal GetUser(string username);
         void CreateUser(UserDal user);
-        void DeleteUser(string username);
+
         void StopAlarm(string alarmId);
         void StartAlarm(string alarmId);
         void DeletePairing(string alarmId, string username);

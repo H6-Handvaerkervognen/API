@@ -71,20 +71,6 @@ namespace HåndværkervognenAPI.Database
             }
         }
 
-        /// <summary>
-        /// Deletes a user from the database
-        /// </summary>
-        /// <param name="username">username of the user to delete</param>
-        public void DeleteUser(string username)
-        {
-            using (_sqlConnection = new SqlConnection(_connString))
-            {
-                CommandCreate("DeleteUser");
-                _sqlCommand.Parameters.AddWithValue("Username", username);
-                _sqlCommand.Connection.Open();
-                _sqlCommand.ExecuteNonQuery();
-            }
-        }
 
         /// <summary>
         /// Get the info on an alaarm from the database
