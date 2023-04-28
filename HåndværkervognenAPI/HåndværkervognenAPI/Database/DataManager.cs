@@ -20,7 +20,7 @@ namespace HåndværkervognenAPI.Database
         public DataManager(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connString = _configuration.GetConnectionString("localConn");
+            _connString = _configuration.GetConnectionString("serverConn");
         }
 
         /// <summary>
@@ -59,12 +59,11 @@ namespace HåndværkervognenAPI.Database
         /// </summary>
         /// <param name="alarmId">the id of the alarm</param>
         /// <param name="username">the username</param>
-        public void DeletePairing(string alarmId, string username)
+        public void DeletePairing(string alarmId)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("DeletePairing");
-                _sqlCommand.Parameters.AddWithValue("Username", username);
                 _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();

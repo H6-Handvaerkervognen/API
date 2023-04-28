@@ -45,12 +45,12 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="alarmId"></param>
         /// <returns></returns>
-        public bool DeletePairing(string alarmId, string username)
+        public bool DeletePairing(string alarmId)
         {
             //todo
             try
             {
-                _database.DeletePairing(alarmId, username);
+                _database.DeletePairing(alarmId);
             }
             catch (Exception)
             {

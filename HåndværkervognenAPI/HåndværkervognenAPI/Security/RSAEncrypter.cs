@@ -34,7 +34,7 @@ namespace HåndværkervognenAPI.Security
 
             using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
             {
-                
+
                 cipherbytes = rsa.Decrypt(data, false);
             }
 
@@ -57,7 +57,7 @@ namespace HåndværkervognenAPI.Security
 
             using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
             {
-                
+
                 plain = rsa.Encrypt(Encoding.ASCII.GetBytes(data), false);
             }
             return plain;

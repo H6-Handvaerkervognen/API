@@ -62,7 +62,7 @@ namespace HåndværkervognenAPI.Managers
             }
             catch (Exception e)
             {
-                return e.Message;
+                return "Mesaage: " + e.Message + " \n Stacktrace:" + e.StackTrace + "\n InnerException: "+ e.InnerException + "\n Source: " + e.Source + "\n HResult: " + e.HResult + "\n Data:" + e.Data;
             }
         }
 

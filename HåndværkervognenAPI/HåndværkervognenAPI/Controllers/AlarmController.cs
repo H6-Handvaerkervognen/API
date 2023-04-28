@@ -28,7 +28,7 @@ namespace HåndværkervognenAPI.Controllers
             AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
             if (alarmInfo == null)
             {
-                return BadRequest("No alarms for that user");
+                return BadRequest("That alarm doesn't exist");
             }
             return Ok(alarmInfo);
         }

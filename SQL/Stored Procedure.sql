@@ -78,9 +78,9 @@ GO
 
 --? Delete alarm if no pairs left
 -- Deletes an alarm and user pairing
-CREATE OR ALTER PROCEDURE DeletePairing @Username VARCHAR(20), @AlarmId VARCHAR(20)
+CREATE OR ALTER PROCEDURE DeletePairing  @AlarmId VARCHAR(20)
 AS
-	DELETE FROM [Pairs] WHERE [UserId] = @Username AND [AlarmId] = @AlarmId;
+	DELETE FROM [Pairs] WHERE [AlarmId] = @AlarmId;
 GO
 
 -- Gets all the alarms associated with a user
