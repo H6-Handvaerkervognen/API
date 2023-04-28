@@ -6,6 +6,6 @@ namespace HåndværkervognenAPI.Managers
     {
         string AuthorizeLogin(LoginCredentials loginCredentials);
         bool RegisterUser(LoginCredentials loginCredentials);
-        void DeleteUser(string username);
+  
     }
 }
