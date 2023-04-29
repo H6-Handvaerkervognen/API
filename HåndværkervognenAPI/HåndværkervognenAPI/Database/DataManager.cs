@@ -12,7 +12,7 @@ namespace HåndværkervognenAPI.Database
         //string _connString = _configuration.GetConnectionString("serverConn");
         private readonly IConfiguration _configuration;
         private string _connString;
-         
+
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
@@ -20,7 +20,7 @@ namespace HåndværkervognenAPI.Database
         public DataManager(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connString = _configuration.GetConnectionString("serverConn");
+            _connString = _configuration.GetConnectionString("localConn");
         }
 
         /// <summary>
@@ -78,8 +78,6 @@ namespace HåndværkervognenAPI.Database
         /// <returns></returns>
         public AlarmDal GetAlarmInfo(string alarmId)
         {
-            
-           
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("GetAlarmInfo");
@@ -88,10 +86,10 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                   return new AlarmDal((byte[])_sqlDataReader["startTime"], (byte[])_sqlDataReader["endTime"], (string)_sqlDataReader["Id"], (byte[])_sqlDataReader["Name"]);
+                    return new AlarmDal((byte[])_sqlDataReader["startTime"], (byte[])_sqlDataReader["endTime"], (string)_sqlDataReader["Id"], (byte[])_sqlDataReader["Name"]);
                 }
                 _sqlDataReader.Close();
-                
+
             }
 
             return null;
@@ -278,6 +276,24 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader.Close();
             }
             return false;
+        }
+
+        public bool CheckAlarmStatus(string alarmId)
+        {
+            bool status = false;
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("GetAlarmStatus");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    status = _sqlDataReader.GetBoolean(0);
+                }
+                _sqlDataReader.Close();
+            }
+            return status;
         }
     }
 }
