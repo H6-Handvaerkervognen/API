@@ -29,7 +29,7 @@ namespace HåndværkervognenAPI.Controllers
             Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (headerValue != "")
             {
-                bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
+                bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo, headerValue);
                 if (response)
                 {
                     return Ok();
@@ -53,7 +53,7 @@ namespace HåndværkervognenAPI.Controllers
             Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (headerValue != "")
             {
-                var alarms = _appService.GetAlarms(username);
+                var alarms = _appService.GetAlarms(username, headerValue);
                 if (alarms == null || alarms.Count <= 0)
                 {
                     return NotFound();
@@ -76,7 +76,7 @@ namespace HåndværkervognenAPI.Controllers
             Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (headerValue != "")
             {
-                string response = _appService.PairAlarm(pairInfo);
+                string response = _appService.PairAlarm(pairInfo, headerValue);
                 if (response == "Yes")
                 {
                     return Created("", pairInfo);
@@ -98,7 +98,7 @@ namespace HåndværkervognenAPI.Controllers
             Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (headerValue !="")
             {
-                bool response = _appService.StopAlarm(AlarmID);
+                bool response = _appService.StopAlarm(AlarmID, username,headerValue);
                 if (response)
                 {
                     return Ok();
