@@ -11,7 +11,7 @@ namespace HåndværkervognenAPI.Security
         public void AssignNewKeys(string containerName)
         {
             CspParameters cspParams = new CspParameters(1);
-            cspParams.KeyContainerName = "kontainer";
+            cspParams.KeyContainerName = containerName;
             cspParams.Flags = CspProviderFlags.UseMachineKeyStore;
             cspParams.ProviderName = "Microsoft Strong Cryptographic Provider";
 
@@ -29,7 +29,7 @@ namespace HåndværkervognenAPI.Security
 
             CspParameters cspParameters = new CspParameters
             {
-                KeyContainerName = "kontainer"
+                KeyContainerName = containerName
             };
 
             using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
@@ -52,7 +52,7 @@ namespace HåndværkervognenAPI.Security
 
             CspParameters cspParameters = new CspParameters
             {
-                KeyContainerName = "kontainer"
+                KeyContainerName = containerName
             };
 
             using (var rsa = new RSACryptoServiceProvider(keySize, cspParameters))
