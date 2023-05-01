@@ -12,7 +12,8 @@ AS
 	VALUES (@Username, @Password, @Salt, @Token);
 GO
 
-CREATE OR ALTER PROCEDURE CheckIfTokenExists @Token VARCHAR(MAX), @Username VARCHAR(40)
+--Check if the token and username is in db
+CREATE OR ALTER PROCEDURE CheckToken @Token VARCHAR(MAX), @Username VARCHAR(40)
 AS
 	SELECT ISNULL(
 	(SELECT 1 FROM Users

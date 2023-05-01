@@ -295,5 +295,26 @@ namespace HåndværkervognenAPI.Database
             }
             return status;
         }
+
+        public bool CheckToken(string username, string token)
+        {
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("CheckToken");
+                _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Parameters.AddWithValue("Token", token);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    if (_sqlDataReader.GetInt32(0) == 1)
+                    {
+                        return true;
+                    }
+                }
+                _sqlDataReader.Close();
+            }
+            return false;
+        }
     }
 }
