@@ -22,7 +22,6 @@ namespace Håndværkervognen_Test.Manager_Tests
         private readonly AlarmDal _validAlarmDal;
         private readonly List<AlarmDal> _alarms;
         private readonly string _validToken;
-        private readonly string _invalidToken;
 
         public AppManagerTests()
         {
@@ -35,7 +34,6 @@ namespace Håndværkervognen_Test.Manager_Tests
             _validAlarmDal = new AlarmDal(new byte[0], new byte[0], _validAlarmId, new byte[0]);
             _alarms = new List<AlarmDal> { _validAlarmDal };
             _validToken = "valid_Token";
-            _invalidToken = "invalid_Token";
         }
 
         [Fact]
