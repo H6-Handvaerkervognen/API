@@ -96,9 +96,9 @@ namespace HåndværkervognenAPI.Controllers
         public IActionResult StopAlarm(string AlarmID, string username)
         {
             Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue !="")
+            if (headerValue.Count>0)
             {
-                bool response = _appService.StopAlarm(AlarmID, username,headerValue);
+                bool response = _appService.StopAlarm(AlarmID, username, headerValue[0]);
                 if (response)
                 {
                     return Ok();
