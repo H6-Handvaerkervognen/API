@@ -18,6 +18,7 @@ namespace HåndværkervognenAPI.Database
         bool CheckIfPairExists(string alarmId, string username);
         bool CheckIfAlarmExists(string alarmId);
         bool CheckAlarmStatus(string alarmId);
+        bool CheckToken(string username, string token);
 
     }
 }
