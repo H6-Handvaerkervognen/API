@@ -93,7 +93,7 @@ namespace HåndværkervognenAPI.Managers
         /// <param name="username"></param>
         /// <param name="alarmInfo"></param>
         /// <returns></returns>
-        public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo, string token)
+        public bool UpdateAlarmInfo(string username, AlarmInfoDto alarmInfo, string token)
         {
             if (_database.CheckToken(username, token))
             {
@@ -101,7 +101,7 @@ namespace HåndværkervognenAPI.Managers
                 if (alarmInfo.AlarmId == data.AlarmId)
                 {
                     AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
-                    _database.UpdateTimespan(username, alarm);
+                    _database.UpdateAlarmInfo(username, alarm);
                     return true;
                 }
 

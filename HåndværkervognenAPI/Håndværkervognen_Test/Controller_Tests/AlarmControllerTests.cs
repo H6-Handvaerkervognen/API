@@ -55,30 +55,28 @@ namespace Håndværkervognen_Test.Controller_Tests
 
 
         [Fact]
-        public void DeleteParring_ReturnsOkResult_WhenPairingIsDeleted()
+        public void DeletePairing_ReturnsOkResult_WhenPairingIsDeleted()
         {
             // Arrange
             string testAlarmId = "testAlarmId";
-            string testUsername = "testUsername";
-            _mockAlarmService.Setup(service => service.DeletePairing(testAlarmId, testUsername)).Returns(true);
+            _mockAlarmService.Setup(service => service.DeletePairing(testAlarmId)).Returns(true);
 
             // Act
-            var result = _controller.DeleteParring(testAlarmId, testUsername);
+            var result = _controller.DeletePairing(testAlarmId);
 
             // Assert
             Assert.IsType<OkResult>(result);
         }
 
         [Fact]
-        public void DeleteParring_ReturnsBadRequestResult_WhenPairingIsNotDeleted()
+        public void DeletePairing_ReturnsBadRequestResult_WhenPairingIsNotDeleted()
         {
             // Arrange
             string testAlarmId = "testAlarmId";
-            string testUsername = "testUsername";
-            _mockAlarmService.Setup(service => service.DeletePairing(testAlarmId, testUsername)).Returns(false);
+            _mockAlarmService.Setup(service => service.DeletePairing(testAlarmId)).Returns(false);
 
             // Act
-            var result = _controller.DeleteParring(testAlarmId, testUsername);
+            var result = _controller.DeletePairing(testAlarmId);
 
             // Assert
             Assert.IsType<BadRequestResult>(result);

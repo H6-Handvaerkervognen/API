@@ -1,4 +1,9 @@
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bin\Debug\net7.0\CoverletSourceRootsMapping
+C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.csproj.AssemblyReference.cache
+C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.AssemblyInfoInputs.cache
+C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.AssemblyInfo.cs
+C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.csproj.CoreCompileInputs.cache
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bin\Debug\net7.0\testhost.dll
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bin\Debug\net7.0\HåndværkervognenAPI.deps.json
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bin\Debug\net7.0\HåndværkervognenAPI.runtimeconfig.json
@@ -117,11 +122,6 @@ C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bi
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bin\Debug\net7.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bin\Debug\net7.0\HåndværkervognenAPI.dll
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\bin\Debug\net7.0\HåndværkervognenAPI.pdb
-C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.csproj.AssemblyReference.cache
-C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.AssemblyInfoInputs.cache
-C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.AssemblyInfo.cs
-C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.csproj.CoreCompileInputs.cache
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.csproj.CopyComplete
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\Håndværkervognen_Test.dll
 C:\Users\seje_\source\repos\API\HåndværkervognenAPI\Håndværkervognen_Test\obj\Debug\net7.0\refint\Håndværkervognen_Test.dll

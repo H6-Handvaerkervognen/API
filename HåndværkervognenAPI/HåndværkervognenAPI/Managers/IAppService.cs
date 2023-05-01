@@ -4,7 +4,7 @@ namespace HåndværkervognenAPI.Managers
 {
     public interface IAppService
     {
-        bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo,string token);
+        bool UpdateAlarmInfo(string username, AlarmInfoDto alarmInfo,string token);
         string PairAlarm(PairInfo info, string token);
         List<AlarmInfoDto> GetAlarms(string username, string token);
         bool StopAlarm(string alarmId, string username, string token);

@@ -18,6 +18,9 @@ namespace Håndværkervognen_Test.Controller_Tests
         private readonly AppController _controller;
         private readonly PairInfo _validPairInfo;
         private readonly List<AlarmInfoDto> _validAlarmsList;
+        private readonly AlarmStopPOGO _alarmStopPOGO;
+        private readonly string _validToken;
+        private readonly string _invalidToken;
 
         public AppControllerTests()
         {
@@ -25,6 +28,9 @@ namespace Håndværkervognen_Test.Controller_Tests
             _controller = new AppController(_mockAppService.Object);
             _validPairInfo = new PairInfo(new AlarmInfoDto ("startTime", "endTime", "alarmId", "testName"), "testUsername");
             _validAlarmsList = new List<AlarmInfoDto> { new AlarmInfoDto ("startTime", "endTime", "alarmId", "testName") };
+            _alarmStopPOGO = new AlarmStopPOGO("testId", "testUsername");
+            _validToken = "valid_Token";
+            _invalidToken = "invalid_Token";
         }
 
         private void SetAuthorizedRequestHeader()
@@ -33,7 +39,7 @@ namespace Håndværkervognen_Test.Controller_Tests
             {
                 HttpContext = new DefaultHttpContext
                 {
-                    Request = { Headers = { { "token", "valid_token" } } }
+                    Request = { Headers = { { "token", _validToken } } }
                 }
             };
         }
@@ -54,7 +60,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.UpdateAlarmInfo(_validPairInfo.Username, _validPairInfo.AlarmInfo)).Returns(true);
+            _mockAppService.Setup(service => service.UpdateAlarmInfo(_validPairInfo.Username, _validPairInfo.AlarmInfo, _validToken)).Returns(true);
 
             // Act
             var result = _controller.UpdateAlarmInfo(_validPairInfo);
@@ -68,7 +74,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.UpdateAlarmInfo(_validPairInfo.Username, _validPairInfo.AlarmInfo)).Returns(false);
+            _mockAppService.Setup(service => service.UpdateAlarmInfo(_validPairInfo.Username, _validPairInfo.AlarmInfo, _validToken)).Returns(false);
 
             // Act
             var result = _controller.UpdateAlarmInfo(_validPairInfo);
@@ -82,7 +88,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetUnauthorizedRequestHeader();
-            _mockAppService.Setup(service => service.UpdateAlarmInfo(_validPairInfo.Username, _validPairInfo.AlarmInfo)).Returns(true);
+            _mockAppService.Setup(service => service.UpdateAlarmInfo(_validPairInfo.Username, _validPairInfo.AlarmInfo, _invalidToken)).Returns(true);
 
             // Act
             var result = _controller.UpdateAlarmInfo(_validPairInfo);
@@ -96,7 +102,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.GetAlarms(_validPairInfo.Username)).Returns(_validAlarmsList);
+            _mockAppService.Setup(service => service.GetAlarms(_validPairInfo.Username, _validToken)).Returns(_validAlarmsList);
 
             // Act
             var result = _controller.GetAlarms(_validPairInfo.Username);
@@ -112,7 +118,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.GetAlarms(_validPairInfo.Username)).Returns(new List<AlarmInfoDto>());
+            _mockAppService.Setup(service => service.GetAlarms(_validPairInfo.Username, _validToken)).Returns(new List<AlarmInfoDto>());
 
             // Act
             var result = _controller.GetAlarms(_validPairInfo.Username);
@@ -126,7 +132,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetUnauthorizedRequestHeader();
-            _mockAppService.Setup(service => service.GetAlarms(_validPairInfo.Username)).Returns(_validAlarmsList);
+            _mockAppService.Setup(service => service.GetAlarms(_validPairInfo.Username, _invalidToken)).Returns(_validAlarmsList);
 
             // Act
             var result = _controller.GetAlarms(_validPairInfo.Username);
@@ -140,7 +146,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo)).Returns(true);
+            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _validToken)).Returns("Yes");
 
             // Act
             var result = _controller.PairAlarm(_validPairInfo);
@@ -156,7 +162,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo)).Returns(false);
+            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _validToken)).Returns("No");
 
             // Act
             var result = _controller.PairAlarm(_validPairInfo);
@@ -170,7 +176,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetUnauthorizedRequestHeader();
-            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo)).Returns(true);
+            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _invalidToken)).Returns("No");
 
             // Act
             var result = _controller.PairAlarm(_validPairInfo);
@@ -184,10 +190,11 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.StopAlarm(_validPairInfo.AlarmInfo.AlarmId)).Returns(true);
+            
+            _mockAppService.Setup(service => service.StopAlarm(_alarmStopPOGO.AlarmID, _alarmStopPOGO.Username ,_validToken)).Returns(true);
 
             // Act
-            var result = _controller.StopAlarm(_validPairInfo.AlarmInfo.AlarmId);
+            var result = _controller.StopAlarm(_alarmStopPOGO);
 
             // Assert
             Assert.IsType<OkResult>(result);
@@ -198,10 +205,10 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.StopAlarm(_validPairInfo.AlarmInfo.AlarmId)).Returns(false);
+            _mockAppService.Setup(service => service.StopAlarm(_alarmStopPOGO.AlarmID, _alarmStopPOGO.Username, _validToken)).Returns(false);
 
             // Act
-            var result = _controller.StopAlarm(_validPairInfo.AlarmInfo.AlarmId);
+            var result = _controller.StopAlarm(_alarmStopPOGO);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -212,10 +219,10 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetUnauthorizedRequestHeader();
-            _mockAppService.Setup(service => service.StopAlarm(_validPairInfo.AlarmInfo.AlarmId)).Returns(true);
+            _mockAppService.Setup(service => service.StopAlarm(_alarmStopPOGO.AlarmID, _alarmStopPOGO.Username, _invalidToken)).Returns(true);
 
             // Act
-            var result = _controller.StopAlarm(_validPairInfo.AlarmInfo.AlarmId);
+            var result = _controller.StopAlarm(_alarmStopPOGO);
 
             // Assert
             Assert.IsType<UnauthorizedResult>(result);

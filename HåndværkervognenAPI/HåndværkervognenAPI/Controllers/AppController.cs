@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace HåndværkervognenAPI.Controllers
-{
+{   
     [ApiController]
     [Route("[controller]/[action]")]
     public class AppController : ControllerBase
@@ -29,7 +29,7 @@ namespace HåndværkervognenAPI.Controllers
             bool exists = Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (exists)
             {
-                bool response = _appService.UpdateAlarmInfo(pairInfo.Username, pairInfo.AlarmInfo);
+                bool response = _appService.UpdateAlarmInfo(pairInfo.Username, pairInfo.AlarmInfo, headerValue[0]);
                 if (response)
                 {
                     return Ok();

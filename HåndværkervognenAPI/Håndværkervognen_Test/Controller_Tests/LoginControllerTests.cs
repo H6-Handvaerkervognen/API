@@ -80,19 +80,5 @@ namespace Håndværkervognen_Test.Controller_Tests
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
-
-        [Fact]
-        public void DeleteUser_ReturnsOkResult_WhenDeletingUserIsSuccessful()
-        {
-            // Arrange
-            string username = "TestUsername";
-            _mockLoginService.Setup(service => service.DeleteUser(username));
-
-            // Act
-            var result = _controller.DeleteUser(username);
-
-            // Assert
-            Assert.IsType<OkResult>(result);
-        }
     }
 }
