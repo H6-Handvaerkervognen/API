@@ -22,8 +22,8 @@ namespace HåndværkervognenAPI.Notifiacation
                 Topic = topic,
                 Notification= new Notification()
                 { 
-                    Title = "Test title from c#!", 
-                    Body = "This is a test body from c#"
+                    Title = "der er inbrud i din bil", 
+                    Body = "skynd dig ud til din bil"
                 }
             };
 

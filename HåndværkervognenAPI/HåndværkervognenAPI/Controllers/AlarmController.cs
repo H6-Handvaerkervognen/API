@@ -39,10 +39,10 @@ namespace HåndværkervognenAPI.Controllers
         /// <param name="alarmID"></param>
         /// <returns></returns>
         [HttpPost(Name = "DeleteParring")]
-        public IActionResult DeleteParring(string alarmID)
+        public IActionResult DeletePairing(AlarmIdPOGO alarmID)
         {
             
-            if (_alarmService.DeletePairing(alarmID))
+            if (_alarmService.DeletePairing(alarmID.AlarmID))
             {
                 return Ok();
             }
@@ -55,9 +55,9 @@ namespace HåndværkervognenAPI.Controllers
         /// <param name="alarmID"></param>
         /// <returns></returns>
         [HttpPost(Name = "ActivateAlarm")]
-        public IActionResult ActivateAlarm(string alarmID)
+        public IActionResult ActivateAlarm(AlarmIdPOGO alarmID)
         {
-            if (_alarmService.AlertUser(alarmID))
+            if (_alarmService.AlertUser(alarmID.AlarmID))
             {
                 return Ok();
             }
@@ -68,11 +68,10 @@ namespace HåndværkervognenAPI.Controllers
         [HttpGet(Name = "GetStatus")]
         public IActionResult GetStatus(string alarmID)
         {
-            if (_alarmService.AlertUser(alarmID))
-            {
-                return Ok();
-            }
-            return BadRequest();
+            
+                return Ok(_alarmService.AlertUser(alarmID));
+            
+            
         }
     }
 }
