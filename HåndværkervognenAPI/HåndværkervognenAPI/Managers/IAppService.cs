@@ -6,7 +6,7 @@ namespace HåndværkervognenAPI.Managers
     {
         bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo);
         string PairAlarm(PairInfo info);
-        List<AlarmInfoDto>GetAlarms(string username);
+        List<AlarmInfoDto> GetAlarms(string username);
         bool StopAlarm(string alarmId);
     }
 }
