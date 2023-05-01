@@ -41,7 +41,7 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "DeleteParring")]
         public IActionResult DeletePairing(AlarmIdPOGO alarmID)
         {
-            
+
             if (_alarmService.DeletePairing(alarmID.AlarmID))
             {
                 return Ok();
@@ -68,10 +68,7 @@ namespace HåndværkervognenAPI.Controllers
         [HttpGet(Name = "GetStatus")]
         public IActionResult GetStatus(string alarmID)
         {
-            
-                return Ok(_alarmService.AlertUser(alarmID));
-            
-            
+            return Ok(_alarmService.GetStatus(alarmID));
         }
     }
 }

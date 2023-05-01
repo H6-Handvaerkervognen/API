@@ -90,7 +90,7 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// post request for stopping an alrm from the app
         /// </summary>
-        /// <param name="AlarmID"></param>
+        /// <param name="alarmStop"></param>
         /// <returns></returns>
         [HttpPost(Name = "StopAlarm")]
         public IActionResult StopAlarm(AlarmStopPOGO alarmStop)
