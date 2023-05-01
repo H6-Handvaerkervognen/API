@@ -29,10 +29,7 @@ namespace HåndværkervognenAPI.Managers
             else return "Error";
         }
 
-        public void DeleteUser(string username)
-        {
-            _database.DeleteUser(username);
-        }
+       
 
         public bool RegisterUser(LoginCredentials loginCredentials)
         {
