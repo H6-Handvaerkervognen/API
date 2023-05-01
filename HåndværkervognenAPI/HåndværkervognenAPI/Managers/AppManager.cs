@@ -71,7 +71,7 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="AlarmId"></param>
         /// <returns></returns>
-        public bool StopAlarm(string alarmId)
+        public bool StopAlarm(string alarmId, string username)
         {
             _database.StopAlarm(alarmId);
             return true;

@@ -76,5 +76,15 @@ namespace HåndværkervognenAPI.Managers
             }
             return null;
         }
+
+        /// <summary>
+        /// Gets alarm status
+        /// </summary>
+        /// <param name="alarmId"></param>
+        /// <returns></returns>
+        public bool GetStatus(string alarmId)
+        {
+            return _database.CheckAlarmStatus(alarmId);
+        }
     }
 }

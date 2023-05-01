@@ -63,5 +63,16 @@ namespace HåndværkervognenAPI.Controllers
             }
             return BadRequest();
         }
+
+
+        [HttpGet(Name = "GetStatus")]
+        public IActionResult GetStatus(string alarmID)
+        {
+            if (_alarmService.AlertUser(alarmID))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

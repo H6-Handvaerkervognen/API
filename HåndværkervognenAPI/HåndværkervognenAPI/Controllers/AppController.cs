@@ -93,7 +93,7 @@ namespace HåndværkervognenAPI.Controllers
         /// <param name="AlarmID"></param>
         /// <returns></returns>
         [HttpPost(Name = "StopAlarm")]
-        public IActionResult StopAlarm(string AlarmID)
+        public IActionResult StopAlarm(string AlarmID, string username)
         {
             Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (headerValue !="")
