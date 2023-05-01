@@ -24,13 +24,19 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="username"></param>
         /// <returns>list of alarminfoDTO</returns>
-        public List<AlarmInfoDto> GetAlarms(string username)
+        public List<AlarmInfoDto> GetAlarms(string username, string token)
         {
-            List<AlarmDal> alarms = _database.GetAlarms(username);
             List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
-            foreach (AlarmDal alarm in alarms)
+            if (_database.CheckToken(username, token))
             {
-                alarmInfoDtos.Add(new AlarmInfoDto(_encryption.DecryptData(alarm.StartTime, alarm.AlarmId), _encryption.DecryptData(alarm.EndTime, alarm.AlarmId), alarm.AlarmId, _encryption.DecryptData(alarm.Name, alarm.AlarmId)));
+                List<AlarmDal> alarms = _database.GetAlarms(username);
+
+                
+                foreach (AlarmDal alarm in alarms)
+                {
+                    alarmInfoDtos.Add(new AlarmInfoDto(_encryption.DecryptData(alarm.StartTime, alarm.AlarmId), _encryption.DecryptData(alarm.EndTime, alarm.AlarmId), alarm.AlarmId, _encryption.DecryptData(alarm.Name, alarm.AlarmId)));
+                }
+                
             }
             return alarmInfoDtos;
         }
@@ -40,25 +46,32 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public bool PairAlarm(PairInfo info)
+        public string PairAlarm(PairInfo info, string token)
         {
-            try
+            if (_database.CheckToken(info.Username,token))
             {
-                AlarmDal alarmDal;
-                if (!_database.CheckIfPairExists(info.AlarmInfo.AlarmId, info.Username))
+                try
                 {
+                    AlarmDal alarmDal;
+                    if (!_database.CheckIfPairExists(info.AlarmInfo.AlarmId, info.Username))
+                    {
+                        if (!_database.CheckIfAlarmExists(info.AlarmInfo.AlarmId))
+                        {
+                            _encryption.AssignNewKeys(info.AlarmInfo.AlarmId);
+                        }
+                        alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId), _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId), info.AlarmInfo.AlarmId, _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
+                        _database.PairAlarms(info.Username, alarmDal);
 
-                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId), _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId), info.AlarmInfo.AlarmId, _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
-                    _database.PairAlarms(info.Username, alarmDal);
-
-                    return true;
+                        return "Yes";
+                    }
+                    return "No";
                 }
-                return false;
+                catch (Exception e)
+                {
+                    return "Mesaage: " + e.Message + " \n Stacktrace:" + e.StackTrace + "\n InnerException: " + e.InnerException + "\n Source: " + e.Source + "\n HResult: " + e.HResult + "\n Data:" + e.Data;
+                }
             }
-            catch (Exception)
-            {
-                return false;
-            }
+            return "No";
         }
 
         /// <summary>
@@ -66,10 +79,14 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="AlarmId"></param>
         /// <returns></returns>
-        public bool StopAlarm(string alarmId)
+        public bool StopAlarm(string alarmId, string username, string token)
         {
-            _database.StopAlarm(alarmId);
-            return true;
+            if (_database.CheckToken(username,token))
+            {
+                _database.StopAlarm(alarmId);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -78,17 +95,23 @@ namespace HåndværkervognenAPI.Managers
         /// <param name="username"></param>
         /// <param name="alarmInfo"></param>
         /// <returns></returns>
-        public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo)
+        public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo, string token)
         {
-            var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
-            if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
+            if (_database.CheckToken(username, token))
             {
-                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
-                _database.UpdateTimespan(username, alarm);
-                return true;
+                var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
+                if (alarmInfo.AlarmId == data.AlarmId)
+                {
+                    AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
+                    _database.UpdateTimespan(username, alarm);
+                    return true;
+                }
+
+                return false;
             }
             return false;
 
+            
         }
     }
 }

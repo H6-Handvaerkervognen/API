@@ -49,17 +49,5 @@ namespace HåndværkervognenAPI.Controllers
             return BadRequest("A user with that username already exists. Login or choose a new username");
         }
 
-
-        /// <summary>
-        /// post request for deleteing a account
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        [HttpPost(Name = "DeleteUser")]
-        public IActionResult DeleteUser(string username)
-        {
-            loginService.DeleteUser(username);
-            return Ok();
-        }
     }
 }

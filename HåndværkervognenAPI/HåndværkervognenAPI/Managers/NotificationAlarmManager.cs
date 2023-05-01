@@ -39,17 +39,18 @@ namespace HåndværkervognenAPI.Managers
             return true;
         }
 
+
         /// <summary>
         /// deletes the paring for a user
         /// </summary>
         /// <param name="alarmId"></param>
         /// <returns></returns>
-        public bool DeletePairing(string alarmId, string username)
+        public bool DeletePairing(string alarmId)
         {
             //todo
             try
             {
-                _database.DeletePairing(alarmId, username);
+                _database.DeletePairing(alarmId);
             }
             catch (Exception)
             {
@@ -68,8 +69,22 @@ namespace HåndværkervognenAPI.Managers
         public AlarmInfoDto GetAlarmInfo(string alarmid)
         {
             AlarmDal alarmDal = _database.GetAlarmInfo(alarmid);
-            AlarmInfoDto alarmInfo = new AlarmInfoDto(_encryption.DecryptData(alarmDal.StartTime, alarmid), _encryption.DecryptData(alarmDal.EndTime, alarmid), alarmid, _encryption.DecryptData(alarmDal.Name, alarmid));
-            return alarmInfo;
+            if (alarmDal != null)
+            {
+                return new AlarmInfoDto(_encryption.DecryptData(alarmDal.StartTime, alarmid), _encryption.DecryptData(alarmDal.EndTime, alarmid), alarmid, _encryption.DecryptData(alarmDal.Name, alarmid));
+
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets alarm status
+        /// </summary>
+        /// <param name="alarmId"></param>
+        /// <returns></returns>
+        public bool GetStatus(string alarmId)
+        {
+            return _database.CheckAlarmStatus(alarmId);
         }
     }
 }

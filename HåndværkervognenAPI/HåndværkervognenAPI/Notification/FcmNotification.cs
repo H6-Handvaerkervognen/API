@@ -14,7 +14,7 @@ namespace HåndværkervognenAPI.Notifiacation
         public async Task SendNotificationAsync(string alarmId)
         {
             //the channel to send the notification to
-            string topic = "Test";
+            string topic = alarmId;
             
             //The message we are sending to the applications
             Message message = new Message()
@@ -22,8 +22,8 @@ namespace HåndværkervognenAPI.Notifiacation
                 Topic = topic,
                 Notification= new Notification()
                 { 
-                    Title = "Test title from c#!", 
-                    Body = "This is a test body from c#"
+                    Title = "der er inbrud i din bil", 
+                    Body = "skynd dig ud til din bil"
                 }
             };
 

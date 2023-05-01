@@ -27,9 +27,9 @@ namespace HåndværkervognenAPI.Controllers
         public IActionResult UpdateAlarmInfo(PairInfo pairInfo)
         {
             Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue != "")
+            if (headerValue.Count > 0)
             {
-                bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo);
+                bool response = _appService.UpdateTimeSpan(pairInfo.Username, pairInfo.AlarmInfo, headerValue[0]);
                 if (response)
                 {
                     return Ok();
@@ -51,9 +51,9 @@ namespace HåndværkervognenAPI.Controllers
         public IActionResult GetAlarms(string username)
         {
             Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue != "")
+            if (headerValue.Count > 0)
             {
-                var alarms = _appService.GetAlarms(username);
+                var alarms = _appService.GetAlarms(username, headerValue[0]);
                 if (alarms == null || alarms.Count <= 0)
                 {
                     return NotFound();
@@ -74,14 +74,14 @@ namespace HåndværkervognenAPI.Controllers
         public IActionResult PairAlarm(PairInfo pairInfo)
         {
             Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue != "")
+            if (headerValue.Count > 0)
             {
-                bool response = _appService.PairAlarm(pairInfo);
-                if (response)
+                string response = _appService.PairAlarm(pairInfo, headerValue[0]);
+                if (response == "Yes")
                 {
                     return Created("", pairInfo);
                 }
-                return NotFound("Pair already exists");
+                return NotFound(response);
             }
             
             return BadRequest();
@@ -90,16 +90,15 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// post request for stopping an alrm from the app
         /// </summary>
-        /// <param name="AlarmID"></param>
+        /// <param name="alarmStop"></param>
         /// <returns></returns>
         [HttpPost(Name = "StopAlarm")]
-        public IActionResult StopAlarm(string AlarmID)
+        public IActionResult StopAlarm(AlarmStopPOGO alarmStop)
         {
-            
             Request.Headers.TryGetValue("token", out StringValues headerValue);
-            if (headerValue !="")
+            if (headerValue.Count>0)
             {
-                bool response = _appService.StopAlarm(AlarmID);
+                bool response = _appService.StopAlarm(alarmStop.AlarmID, alarmStop.Username, headerValue[0]);
                 if (response)
                 {
                     return Ok();
