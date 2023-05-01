@@ -6,5 +6,9 @@
 
 		public string AlarmID { get; private set; }
 
+        public AlarmIdPOGO(string alarmID)
+        {
+            AlarmID = alarmID;
+        }
     }
 }
