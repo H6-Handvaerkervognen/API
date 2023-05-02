@@ -80,7 +80,7 @@ namespace HåndværkervognenAPI.Controllers
                 {
                     return Created("", pairInfo);
                 }
-                return NotFound(response);
+                return NotFound();
             }
             
             return BadRequest();
