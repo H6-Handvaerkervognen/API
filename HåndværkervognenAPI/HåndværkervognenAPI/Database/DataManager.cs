@@ -20,7 +20,7 @@ namespace HåndværkervognenAPI.Database
         public DataManager(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connString = _configuration.GetConnectionString("ServerConn");
+            _connString = _configuration.GetConnectionString("serverConn");
         }
 
         /// <summary>

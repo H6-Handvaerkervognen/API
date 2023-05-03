@@ -57,9 +57,12 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "ActivateAlarm")]
         public IActionResult ActivateAlarm(AlarmIdPOGO alarmID)
         {
-            if (_alarmService.AlertUser(alarmID.AlarmID))
+            if (!_alarmService.GetStatus(alarmID.AlarmID))
             {
-                return Ok();
+                if (_alarmService.AlertUser(alarmID.AlarmID))
+                {
+                    return Ok();
+                }
             }
             return BadRequest();
         }
