@@ -76,12 +76,11 @@ namespace HåndværkervognenAPI.Controllers
             Request.Headers.TryGetValue("token", out StringValues headerValue);
             if (headerValue.Count > 0)
             {
-                string response = _appService.PairAlarm(pairInfo, headerValue[0]);
-                if (response == "Yes")
+                if (_appService.PairAlarm(pairInfo, headerValue[0]))
                 {
                     return Created("", pairInfo);
                 }
-                return NotFound(response);
+                return NotFound();
             }
             
             return BadRequest();
