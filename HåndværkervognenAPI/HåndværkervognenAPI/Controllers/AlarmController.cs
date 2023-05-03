@@ -38,7 +38,7 @@ namespace HåndværkervognenAPI.Controllers
         /// </summary>
         /// <param name="alarmID"></param>
         /// <returns></returns>
-        [HttpDelete(Name = "DeleteParring")]
+        [HttpDelete(Name = "DeletePairing")]
         public IActionResult DeletePairing(AlarmIdPOGO alarmID)
         {
 
