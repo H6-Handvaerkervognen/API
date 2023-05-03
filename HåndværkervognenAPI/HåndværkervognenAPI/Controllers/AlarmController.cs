@@ -38,7 +38,7 @@ namespace HåndværkervognenAPI.Controllers
         /// </summary>
         /// <param name="alarmID"></param>
         /// <returns></returns>
-        [HttpPost(Name = "DeleteParring")]
+        [HttpDelete(Name = "DeleteParring")]
         public IActionResult DeletePairing(AlarmIdPOGO alarmID)
         {
 
@@ -63,8 +63,9 @@ namespace HåndværkervognenAPI.Controllers
                 {
                     return Ok();
                 }
+                return BadRequest();
             }
-            return BadRequest();
+            return BadRequest("Alarm already on");
         }
 
 
