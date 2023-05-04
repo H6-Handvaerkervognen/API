@@ -8,8 +8,6 @@ namespace HåndværkervognenAPI.Database
 {
     public class DataManager : IDatabase
     {
-        //SERVER
-        //string _connString = _configuration.GetConnectionString("serverConn");
         private readonly IConfiguration _configuration;
         private string _connString;
 
@@ -20,7 +18,7 @@ namespace HåndværkervognenAPI.Database
         public DataManager(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connString = _configuration.GetConnectionString("ServerConn");
+            _connString = _configuration.GetConnectionString("serverConn");
         }
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace HåndværkervognenAPI.Database
 
 
         /// <summary>
-        /// Get the info on an alarm from the database
+        /// Get the info on an alaarm from the database
         /// </summary>
         /// <param name="alarmId">the id of the alarm to get info on</param>
         /// <returns></returns>
@@ -120,7 +118,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Retrieves a user from the database from a usename
+        /// Retrieves a user from the daatabase from a usename
         /// </summary>
         /// <param name="username">username of the user to get</param>
         /// <returns></returns>
@@ -163,7 +161,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Updates the field in the database that changes the state of the alarm to off
+        /// Updates the field in the database that indicates whether the alarm is on, to off
         /// </summary>
         /// <param name="alarmId"></param>
         public void StopAlarm(string alarmId)
@@ -183,7 +181,7 @@ namespace HåndværkervognenAPI.Database
         /// </summary>
         /// <param name="username">username</param>
         /// <param name="alarmDal">The alarm to update</param>
-        public void UpdateAlarmInfo(string username, AlarmDal alarmDal)
+        public void UpdateTimespan(string username, AlarmDal alarmDal)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
@@ -198,7 +196,7 @@ namespace HåndværkervognenAPI.Database
 
 
         /// <summary>
-        /// Updates the field in the database that changes the state of the alarm to on
+        /// Updates the field in the database that indicates whether the alarm is on, to on
         /// </summary>
         /// <param name="alarmId">the id of the alarm to update</param>
         public void StartAlarm(string alarmId)
@@ -238,10 +236,10 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Check if a user / alarm pairing exists
+        /// Checks if the pair exists in the databse
         /// </summary>
-        /// <param name="alarmId">Id of the alarm</param>
-        /// <param name="username">Name of the owner of the alarm</param>
+        /// <param name="alarmId">The alarms id</param>
+        /// <param name="username">The user</param>
         /// <returns></returns>
         public bool CheckIfPairExists(string alarmId, string username)
         {
@@ -264,6 +262,11 @@ namespace HåndværkervognenAPI.Database
             return false;
         }
 
+        /// <summary>
+        /// Checks if the alarm exists in the database
+        /// </summary>
+        /// <param name="alarmId">The alarms id</param>
+        /// <returns></returns>
         public bool CheckIfAlarmExists(string alarmId)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -284,6 +287,11 @@ namespace HåndværkervognenAPI.Database
             return false;
         }
 
+        /// <summary>
+        /// Checks if the alarm i on or off
+        /// </summary>
+        /// <param name="alarmId">The alarms id</param>
+        /// <returns></returns>
         public bool CheckAlarmStatus(string alarmId)
         {
             bool status = false;
@@ -302,6 +310,12 @@ namespace HåndværkervognenAPI.Database
             return status;
         }
 
+        /// <summary>
+        /// Sees if there exists an entry in the database where both the username and token match
+        /// </summary>
+        /// <param name="username">The username</param>
+        /// <param name="token">The token to look for</param>
+        /// <returns></returns>
         public bool CheckToken(string username, string token)
         {
             using (_sqlConnection = new SqlConnection(_connString))

@@ -8,5 +8,6 @@ namespace HåndværkervognenAPI.Managers
         bool DeletePairing(string alarmId);
         bool AlertUser(string alarmId);
         bool GetStatus(string alarmId);
+        bool CheckIfAlarmExist(string alarmId);
     }
 }
