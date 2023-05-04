@@ -185,10 +185,11 @@ namespace HåndværkervognenAPI.Database
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
-                CommandCreate("UpdateActiveHours");
+                CommandCreate("UpdateAlarm");
                 _sqlCommand.Parameters.AddWithValue("AlarmId", alarmDal.AlarmId);
                 _sqlCommand.Parameters.AddWithValue("startTime", alarmDal.StartTime);
                 _sqlCommand.Parameters.AddWithValue("EndTime", alarmDal.EndTime);
+                _sqlCommand.Parameters.AddWithValue("Name", alarmDal.Name);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
