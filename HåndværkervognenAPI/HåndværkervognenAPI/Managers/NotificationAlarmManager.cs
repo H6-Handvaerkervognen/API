@@ -9,13 +9,13 @@ namespace HåndværkervognenAPI.Managers
     {
         private IDatabase _database;
         private IEncryption _encryption;
-        private INotification _notifiaction;
+        private INotification _notification;
 
-        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotification notifiaction)
+        public NotificationAlarmManager(IDatabase database, IEncryption encryption, INotification notification)
         {
             _database = database;
             _encryption = encryption;
-            _notifiaction = notifiaction;
+            _notification = notification;
         }
 
         /// <summary>
@@ -27,36 +27,36 @@ namespace HåndværkervognenAPI.Managers
         {
             try
             {
-                _notifiaction.SendNotificationAsync(alarmId);
+                _notification.SendNotificationAsync(alarmId);
                 _database.StartAlarm(alarmId);
             }
             catch (Exception)
             {
 
-               return false;
+                return false;
 
             }
             return true;
         }
+
 
         /// <summary>
         /// deletes the paring for a user
         /// </summary>
         /// <param name="alarmId"></param>
         /// <returns></returns>
-        public bool DeletePairing(string alarmId, string username)
+        public bool DeletePairing(string alarmId)
         {
             //todo
             try
             {
-              _database.DeletePairing(alarmId, username);
+                _database.DeletePairing(alarmId);
             }
             catch (Exception)
             {
-
-               return false;
+                return false;
             }
-           
+
             return true;
         }
 
@@ -68,8 +68,22 @@ namespace HåndværkervognenAPI.Managers
         public AlarmInfoDto GetAlarmInfo(string alarmid)
         {
             AlarmDal alarmDal = _database.GetAlarmInfo(alarmid);
-            AlarmInfoDto alarmInfo = new AlarmInfoDto(TimeSpan.Parse( _encryption.DecryptData(alarmDal.StartTime)),TimeSpan.Parse( _encryption.DecryptData(alarmDal.EndTime)),alarmid, _encryption.DecryptData(alarmDal.Name));
-            return alarmInfo;
+            if (alarmDal != null)
+            {
+                return new AlarmInfoDto(_encryption.DecryptData(alarmDal.StartTime, alarmid), _encryption.DecryptData(alarmDal.EndTime, alarmid), alarmid, _encryption.DecryptData(alarmDal.Name, alarmid));
+
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets alarm status
+        /// </summary>
+        /// <param name="alarmId"></param>
+        /// <returns></returns>
+        public bool GetStatus(string alarmId)
+        {
+            return _database.CheckAlarmStatus(alarmId);
         }
     }
 }

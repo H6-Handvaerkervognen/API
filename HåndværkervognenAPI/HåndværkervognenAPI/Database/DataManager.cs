@@ -1,18 +1,27 @@
 ﻿using HåndværkervognenAPI.Models;
 using System.Data.SqlClient;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace HåndværkervognenAPI.Database
 {
     public class DataManager : IDatabase
     {
         //SERVER
-        //string _connString = "Server=ZBC-E-RO-23245;Database=haandvaerkervognen;Uid=sa;Pwd=straWb3rr%;";
+        //string _connString = _configuration.GetConnectionString("serverConn");
+        private readonly IConfiguration _configuration;
+        private string _connString;
 
-        string _connString = "Server=NANNA-STATIONÆR;Database=haandvaerkervognen;Trusted_Connection=True;";
         SqlConnection _sqlConnection;
         SqlCommand _sqlCommand;
         SqlDataReader _sqlDataReader;
+
+        public DataManager(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _connString = _configuration.GetConnectionString("ServerConn");
+        }
 
         /// <summary>
         /// Creates a new command, changes the type to stored procedure and sets the commandtext 
@@ -39,6 +48,7 @@ namespace HåndværkervognenAPI.Database
                 _sqlCommand.Parameters.AddWithValue("Username", user.UserName);
                 _sqlCommand.Parameters.AddWithValue("Password", user.HashPassword);
                 _sqlCommand.Parameters.AddWithValue("Salt", user.Salt);
+                _sqlCommand.Parameters.AddWithValue("Token", user.Token);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
@@ -49,41 +59,25 @@ namespace HåndværkervognenAPI.Database
         /// </summary>
         /// <param name="alarmId">the id of the alarm</param>
         /// <param name="username">the username</param>
-        public void DeletePairing(string alarmId, string username)
+        public void DeletePairing(string alarmId)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("DeletePairing");
-                _sqlCommand.Parameters.AddWithValue("Username", username);
                 _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
         }
 
-        /// <summary>
-        /// Deletes a user from the database
-        /// </summary>
-        /// <param name="username">username of the user to delete</param>
-        public void DeleteUser(string username)
-        {
-            using (_sqlConnection = new SqlConnection(_connString))
-            {
-                CommandCreate("DeleteUser");
-                _sqlCommand.Parameters.AddWithValue("Username", username);
-                _sqlCommand.Connection.Open();
-                _sqlCommand.ExecuteNonQuery();
-            }
-        }
 
         /// <summary>
-        /// Get the info on an alaarm from the database
+        /// Get the info on an alarm from the database
         /// </summary>
         /// <param name="alarmId">the id of the alarm to get info on</param>
         /// <returns></returns>
         public AlarmDal GetAlarmInfo(string alarmId)
         {
-            AlarmDal alarm;
             using (_sqlConnection = new SqlConnection(_connString))
             {
                 CommandCreate("GetAlarmInfo");
@@ -92,13 +86,12 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    if ((int)_sqlDataReader["AlarmExists"] == 0)
-                    {
-                        alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
-                    }
+                    return new AlarmDal((byte[])_sqlDataReader["startTime"], (byte[])_sqlDataReader["endTime"], (string)_sqlDataReader["Id"], (byte[])_sqlDataReader["Name"]);
                 }
                 _sqlDataReader.Close();
+
             }
+
             return null;
         }
 
@@ -118,7 +111,7 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    AlarmDal alarm = new AlarmDal(_sqlDataReader.GetString(1), _sqlDataReader.GetString(2), _sqlDataReader.GetString(0), _sqlDataReader.GetString(3));
+                    AlarmDal alarm = new AlarmDal((byte[])_sqlDataReader["startTime"], (byte[])_sqlDataReader["endTime"], (string)_sqlDataReader["Id"], (byte[])_sqlDataReader["Name"]);
                     alarms.Add(alarm);
                 }
                 _sqlDataReader.Close();
@@ -127,7 +120,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Retrieves a user from the daatabase from a usename
+        /// Retrieves a user from the database from a usename
         /// </summary>
         /// <param name="username">username of the user to get</param>
         /// <returns></returns>
@@ -141,7 +134,7 @@ namespace HåndværkervognenAPI.Database
                 _sqlDataReader = _sqlCommand.ExecuteReader();
                 while (_sqlDataReader.Read())
                 {
-                    UserDal user = new UserDal(_sqlDataReader.GetString(0), _sqlDataReader.GetString(1), (byte[])_sqlDataReader["salt"]);
+                    UserDal user = new UserDal(_sqlDataReader.GetString(0), _sqlDataReader.GetString(1), (byte[])_sqlDataReader["salt"], _sqlDataReader.GetString(3));
                     return user;
                 }
                 _sqlDataReader.Close();
@@ -164,14 +157,13 @@ namespace HåndværkervognenAPI.Database
                 _sqlCommand.Parameters.AddWithValue("StartTime", alarmInfo.StartTime);
                 _sqlCommand.Parameters.AddWithValue("EndTime", alarmInfo.EndTime);
                 _sqlCommand.Parameters.AddWithValue("Name", alarmInfo.Name);
-                _sqlCommand.Parameters.AddWithValue("Salt", alarmInfo.Salt);
                 _sqlCommand.Connection.Open();
                 _sqlCommand.ExecuteNonQuery();
             }
         }
 
         /// <summary>
-        /// Updates the field in the database that indicates whether the alarm is on, to off
+        /// Updates the field in the database that changes the state of the alarm to off
         /// </summary>
         /// <param name="alarmId"></param>
         public void StopAlarm(string alarmId)
@@ -191,7 +183,7 @@ namespace HåndværkervognenAPI.Database
         /// </summary>
         /// <param name="username">username</param>
         /// <param name="alarmDal">The alarm to update</param>
-        public void UpdateTimespan(string username, AlarmDal alarmDal)
+        public void UpdateAlarmInfo(string username, AlarmDal alarmDal)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
@@ -206,7 +198,7 @@ namespace HåndværkervognenAPI.Database
 
 
         /// <summary>
-        /// Updates the field in the database that indicates whether the alarm is on, to on
+        /// Updates the field in the database that changes the state of the alarm to on
         /// </summary>
         /// <param name="alarmId">the id of the alarm to update</param>
         public void StartAlarm(string alarmId)
@@ -227,19 +219,108 @@ namespace HåndværkervognenAPI.Database
         /// <returns>True if user with the username exists, false if user doesn't exists</returns>
         public bool CheckIfUserExists(string username)
         {
-            CommandCreate("CheckIfUserExists");
-            _sqlCommand.Parameters.AddWithValue("Username", username);
-            _sqlCommand.Connection.Open();
-            _sqlDataReader = _sqlCommand.ExecuteReader();
-            while (_sqlDataReader.Read())
+            using (_sqlConnection = new SqlConnection(_connString))
             {
-                if ((int)_sqlDataReader["UserExists"] == 0)
+                CommandCreate("CheckIfUserExists");
+                _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
                 {
-                    return false;
+                    if (_sqlDataReader.GetInt32(0) == 1)
+                    {
+                        return true;
+                    }
                 }
+                _sqlDataReader.Close();
             }
-            _sqlDataReader.Close();
-            return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Check if a user / alarm pairing exists
+        /// </summary>
+        /// <param name="alarmId">Id of the alarm</param>
+        /// <param name="username">Name of the owner of the alarm</param>
+        /// <returns></returns>
+        public bool CheckIfPairExists(string alarmId, string username)
+        {
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("CheckIfPairExists");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
+                _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    if (_sqlDataReader.GetInt32(0) == 1)
+                    {
+                        return true;
+                    }
+                }
+                _sqlDataReader.Close();
+            }
+            return false;
+        }
+
+        public bool CheckIfAlarmExists(string alarmId)
+        {
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("CheckIfAlarmExists");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    if (_sqlDataReader.GetInt32(0) == 1)
+                    {
+                        return true;
+                    }
+                }
+                _sqlDataReader.Close();
+            }
+            return false;
+        }
+
+        public bool CheckAlarmStatus(string alarmId)
+        {
+            bool status = false;
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("GetAlarmStatus");
+                _sqlCommand.Parameters.AddWithValue("AlarmId", alarmId);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    status = _sqlDataReader.GetBoolean(0);
+                }
+                _sqlDataReader.Close();
+            }
+            return status;
+        }
+
+        public bool CheckToken(string username, string token)
+        {
+            using (_sqlConnection = new SqlConnection(_connString))
+            {
+                CommandCreate("CheckToken");
+                _sqlCommand.Parameters.AddWithValue("Username", username);
+                _sqlCommand.Parameters.AddWithValue("Token", token);
+                _sqlCommand.Connection.Open();
+                _sqlDataReader = _sqlCommand.ExecuteReader();
+                while (_sqlDataReader.Read())
+                {
+                    if (_sqlDataReader.GetInt32(0) == 1)
+                    {
+                        return true;
+                    }
+                }
+                _sqlDataReader.Close();
+            }
+            return false;
         }
     }
 }

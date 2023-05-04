@@ -2,8 +2,8 @@
 {
     public interface IEncryption
     {
-        public void AssignNewKeys();
-        public string EncryptData(string data);
-        public string DecryptData(string data);
+        public void AssignNewKeys(string containerName);
+        public byte[] EncryptData(string data, string containerName);
+        public string DecryptData(byte[] data, string containerName);
     }
 }

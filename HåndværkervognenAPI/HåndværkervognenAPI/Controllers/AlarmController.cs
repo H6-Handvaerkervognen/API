@@ -6,7 +6,7 @@ namespace HåndværkervognenAPI.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class AlarmController:ControllerBase
+    public class AlarmController : ControllerBase
     {
         private IAlarmService _alarmService;
 
@@ -19,15 +19,15 @@ namespace HåndværkervognenAPI.Controllers
         /// <summary>
         /// Get request that gets info on specific alarm form alarmManager
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="alarmId"></param>
         /// <returns>AlarmInfoDto alarmInfo</returns>
         [HttpGet(Name = "GetAlarmInfo")]
-        public IActionResult GetAlarmInfo(string username)
+        public IActionResult GetAlarmInfo(string alarmId)
         {
-           AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(username);
-            if (alarmInfo==null)
+            AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
+            if (alarmInfo == null)
             {
-                return BadRequest();
+                return NoContent();
             }
             return Ok(alarmInfo);
         }
@@ -37,11 +37,10 @@ namespace HåndværkervognenAPI.Controllers
         /// </summary>
         /// <param name="alarmID"></param>
         /// <returns></returns>
-        [HttpPost(Name = "DeleteParring")]
-        public IActionResult DeleteParring(string alarmID, string username)
+        [HttpDelete(Name = "DeletePairing")]
+        public IActionResult DeletePairing(string alarmId)
         {
-            //MANGLER USERNAME
-            if (_alarmService.DeletePairing(alarmID, username))
+            if (_alarmService.DeletePairing(alarmId))
             {
                 return Ok();
             }
@@ -49,18 +48,25 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         /// <summary>
-        /// post request that takes alarmid and notyfies users and change a field in the database
+        /// post request that takes alarmid and notifies users and changes alarm state
         /// </summary>
-        /// <param name="AlarmID"></param>
+        /// <param name="alarmId"></param>
         /// <returns></returns>
         [HttpPost(Name = "ActivateAlarm")]
-        public IActionResult ActivateAlarm(string AlarmID)
+        public IActionResult ActivateAlarm(string alarmId)
         {
-            if (_alarmService.AlertUser(AlarmID))
+            if (_alarmService.AlertUser(alarmId))
             {
                 return Ok();
             }
             return BadRequest();
+        }
+
+
+        [HttpGet(Name = "GetStatus")]
+        public IActionResult GetStatus(string alarmId)
+        {
+            return Ok(_alarmService.GetStatus(alarmId));
         }
     }
 }

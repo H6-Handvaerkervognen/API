@@ -5,7 +5,8 @@ namespace HåndværkervognenAPI.Managers
     public interface IAlarmService
     {
         AlarmInfoDto GetAlarmInfo(string alarmid);
-        bool DeletePairing(string alarmId, string username);
+        bool DeletePairing(string alarmId);
         bool AlertUser(string alarmId);
+        bool GetStatus(string alarmId);
     }
 }

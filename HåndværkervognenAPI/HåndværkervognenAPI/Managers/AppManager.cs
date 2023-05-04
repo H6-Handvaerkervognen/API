@@ -10,65 +10,66 @@ namespace HåndværkervognenAPI.Managers
     {
         private IDatabase _database;
         private IEncryption _encryption;
-        private IHashing _hashing;
 
-        public AppManager(IDatabase database, IEncryption encryption,IHashing hashing)
+        public AppManager(IDatabase database, IEncryption encryption)
         {
-            _database= database;
+            _database = database;
             _encryption = encryption;
-            _hashing = hashing;
         }
 
         /// <summary>
-        /// calls database and gets alarms for aspecific user and converts from alarmDal to alarminfoDTO before returning a list of alarminfoDTO
+        /// Gets alarms for a specific user and converts from alarmDal to alarminfoDTO before returning a list of alarminfoDTO
         /// </summary>
         /// <param name="username"></param>
         /// <returns>list of alarminfoDTO</returns>
-        public List<AlarmInfoDto> GetAlarms(string username)
+        public List<AlarmInfoDto> GetAlarms(string username, string token)
         {
-           List<AlarmDal> alarms = _database.GetAlarms(username);
             List<AlarmInfoDto> alarmInfoDtos = new List<AlarmInfoDto>();
-            foreach (AlarmDal alarm in alarms)
+            if (_database.CheckToken(username, token))
             {
-                alarmInfoDtos.Add(new AlarmInfoDto(TimeSpan.Parse(_encryption.DecryptData(alarm.StartTime)), TimeSpan.Parse(_encryption.DecryptData(alarm.EndTime)), alarm.AlarmId, _encryption.DecryptData(alarm.Name)));
-             
+                List<AlarmDal> alarms = _database.GetAlarms(username);
+
+                
+                foreach (AlarmDal alarm in alarms)
+                {
+                    alarmInfoDtos.Add(new AlarmInfoDto(_encryption.DecryptData(alarm.StartTime, alarm.AlarmId), _encryption.DecryptData(alarm.EndTime, alarm.AlarmId), alarm.AlarmId, _encryption.DecryptData(alarm.Name, alarm.AlarmId)));
+                }
+                
             }
             return alarmInfoDtos;
         }
 
         /// <summary>
-        /// creates a new salt for alarmid if its the first time the alarm is paired. the n is hashes the alarm id and encrypts the rest of the data and stores it 
+        /// creates a new salt for alarmid if its the first time the alarm is paired. Encrypts the rest of the data and stores it
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public bool PairAlarm(PairInfo info)
+        public string PairAlarm(PairInfo info, string token)
         {
-            try
+            if (_database.CheckToken(info.Username,token))
             {
-                AlarmDal alarmDal;
-                AlarmDal DBData = _database.GetAlarmInfo(info.AlarmInfo.AlarmId);
-
-                if (DBData != null)
+                try
                 {
-                    alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()), _encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, DBData.Salt)), _encryption.EncryptData(info.AlarmInfo.Name));
-                    _database.PairAlarms(info.Username, alarmDal);
-                    return true;
+                    AlarmDal alarmDal;
+                    if (!_database.CheckIfPairExists(info.AlarmInfo.AlarmId, info.Username))
+                    {
+                        if (!_database.CheckIfAlarmExists(info.AlarmInfo.AlarmId))
+                        {
+                            _encryption.AssignNewKeys(info.AlarmInfo.AlarmId);
+                        }
+                        alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime, info.AlarmInfo.AlarmId), _encryption.EncryptData(info.AlarmInfo.EndTime, info.AlarmInfo.AlarmId), info.AlarmInfo.AlarmId, _encryption.EncryptData(info.AlarmInfo.Name, info.AlarmInfo.AlarmId));
+                        _database.PairAlarms(info.Username, alarmDal);
+
+                        return "Yes";
+                    }
+                    return "No";
                 }
-                byte[] newSalt = _hashing.GenerateSalt();
-                alarmDal = new AlarmDal(_encryption.EncryptData(info.AlarmInfo.StartTime.ToString()),_encryption.EncryptData(info.AlarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(info.AlarmInfo.AlarmId, newSalt)), _encryption.EncryptData(info.AlarmInfo.Name));
-
-
-                _database.PairAlarms(info.Username, alarmDal);
-
-                return true;
+                catch (Exception e)
+                {
+                    return "Mesaage: " + e.Message + " \n Stacktrace:" + e.StackTrace + "\n InnerException: " + e.InnerException + "\n Source: " + e.Source + "\n HResult: " + e.HResult + "\n Data:" + e.Data;
+                }
             }
-            catch (Exception)
-            {
-
-                return false;
-            }
-
-
+            return "No";
         }
 
         /// <summary>
@@ -76,31 +77,38 @@ namespace HåndværkervognenAPI.Managers
         /// </summary>
         /// <param name="AlarmId"></param>
         /// <returns></returns>
-        public bool StopAlarm(string alarmId)
+        public bool StopAlarm(string alarmId, string username, string token)
         {
-            _database.StopAlarm(alarmId);
-            return true;
+            if (_database.CheckToken(username,token))
+            {
+                _database.StopAlarm(alarmId);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
-        /// converts the data to the rigth objects and saves the new timespan
+        /// converts the data into a <see cref="AlarmDal"/> and updates the new values
         /// </summary>
         /// <param name="username"></param>
         /// <param name="alarmInfo"></param>
         /// <returns></returns>
-        public bool UpdateTimeSpan(string username, AlarmInfoDto alarmInfo)
+        public bool UpdateAlarmInfo(string username, AlarmInfoDto alarmInfo, string token)
         {
-
-
-
-            var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
-            if (_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt).ToString() == data.AlarmId)
+            if (_database.CheckToken(username, token))
             {
-                AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime.ToString()), _encryption.EncryptData(alarmInfo.EndTime.ToString()), Encoding.ASCII.GetString(_hashing.GenerateHash(alarmInfo.AlarmId, data.Salt)), _encryption.EncryptData(alarmInfo.Name));
-                _database.UpdateTimespan(username, alarm);
-                return true;
+                var data = _database.GetAlarmInfo(alarmInfo.AlarmId);
+                if (alarmInfo.AlarmId == data.AlarmId)
+                {
+                    AlarmDal alarm = new AlarmDal(_encryption.EncryptData(alarmInfo.StartTime, alarmInfo.AlarmId), _encryption.EncryptData(alarmInfo.EndTime, alarmInfo.AlarmId), alarmInfo.AlarmId, _encryption.EncryptData(alarmInfo.Name, alarmInfo.AlarmId));
+                    _database.UpdateAlarmInfo(username, alarm);
+                    return true;
+                }
+
+                return false;
             }
             return false;
+
             
         }
     }
