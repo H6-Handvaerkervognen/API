@@ -39,6 +39,11 @@ namespace HåndværkervognenAPI.Managers
             return true;
         }
 
+        public bool CheckIfAlarmExist(string alarmId)
+        {
+            return _database.CheckIfAlarmExists(alarmId);
+        }
+
 
         /// <summary>
         /// deletes the paring for a user
@@ -84,6 +89,7 @@ namespace HåndværkervognenAPI.Managers
         /// <returns></returns>
         public bool GetStatus(string alarmId)
         {
+            
             return _database.CheckAlarmStatus(alarmId);
         }
     }

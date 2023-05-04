@@ -8,8 +8,6 @@ namespace HåndværkervognenAPI.Database
 {
     public class DataManager : IDatabase
     {
-        //SERVER
-        //string _connString = _configuration.GetConnectionString("serverConn");
         private readonly IConfiguration _configuration;
         private string _connString;
 
@@ -237,6 +235,12 @@ namespace HåndværkervognenAPI.Database
             return false;
         }
 
+        /// <summary>
+        /// Checks if the pair exists in the databse
+        /// </summary>
+        /// <param name="alarmId">The alarms id</param>
+        /// <param name="username">The user</param>
+        /// <returns></returns>
         public bool CheckIfPairExists(string alarmId, string username)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -258,6 +262,11 @@ namespace HåndværkervognenAPI.Database
             return false;
         }
 
+        /// <summary>
+        /// Checks if the alarm exists in the database
+        /// </summary>
+        /// <param name="alarmId">The alarms id</param>
+        /// <returns></returns>
         public bool CheckIfAlarmExists(string alarmId)
         {
             using (_sqlConnection = new SqlConnection(_connString))
@@ -278,6 +287,11 @@ namespace HåndværkervognenAPI.Database
             return false;
         }
 
+        /// <summary>
+        /// Checks if the alarm i on or off
+        /// </summary>
+        /// <param name="alarmId">The alarms id</param>
+        /// <returns></returns>
         public bool CheckAlarmStatus(string alarmId)
         {
             bool status = false;
@@ -296,6 +310,12 @@ namespace HåndværkervognenAPI.Database
             return status;
         }
 
+        /// <summary>
+        /// Sees if there exists an entry in the database where both the username and token match
+        /// </summary>
+        /// <param name="username">The username</param>
+        /// <param name="token">The token to look for</param>
+        /// <returns></returns>
         public bool CheckToken(string username, string token)
         {
             using (_sqlConnection = new SqlConnection(_connString))

@@ -57,22 +57,30 @@ namespace HåndværkervognenAPI.Controllers
         [HttpPost(Name = "ActivateAlarm")]
         public IActionResult ActivateAlarm(AlarmIdPOGO alarmID)
         {
-            if (!_alarmService.GetStatus(alarmID.AlarmID))
+            if (_alarmService.CheckIfAlarmExist(alarmID.AlarmID))
             {
-                if (_alarmService.AlertUser(alarmID.AlarmID))
+                if (!_alarmService.GetStatus(alarmID.AlarmID))
                 {
-                    return Ok();
+                    if (_alarmService.AlertUser(alarmID.AlarmID))
+                    {
+                        return Ok("Alarm startet");
+                    }
+                    return BadRequest();
                 }
-                return BadRequest();
+                return BadRequest("Alarm already on");
             }
-            return BadRequest("Alarm already on");
+            return NotFound("No alarm found");
         }
 
 
         [HttpGet(Name = "GetStatus")]
         public IActionResult GetStatus(string alarmID)
         {
-            return Ok(_alarmService.GetStatus(alarmID));
+            if (_alarmService.CheckIfAlarmExist(alarmID))
+            {
+                return Ok(_alarmService.GetStatus(alarmID));
+            }
+            return NotFound();
         }
     }
 }
