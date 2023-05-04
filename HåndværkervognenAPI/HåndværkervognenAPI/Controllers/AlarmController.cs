@@ -50,7 +50,7 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         /// <summary>
-        /// post request that takes alarmid and notyfies users and change a field in the database
+        /// post request that takes alarmid and notifies users and change a field in the database
         /// </summary>
         /// <param name="alarmID"></param>
         /// <returns></returns>
