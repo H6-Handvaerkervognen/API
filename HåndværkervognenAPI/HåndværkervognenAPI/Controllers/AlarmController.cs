@@ -24,10 +24,11 @@ namespace HåndværkervognenAPI.Controllers
         [HttpGet(Name = "GetAlarmInfo")]
         public IActionResult GetAlarmInfo(string alarmId)
         {
+
             AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
             if (alarmInfo == null)
             {
-                return NoContent();
+                return BadRequest("That alarm doesn't exist");
             }
             return Ok(alarmInfo);
         }
@@ -38,9 +39,10 @@ namespace HåndværkervognenAPI.Controllers
         /// <param name="alarmID"></param>
         /// <returns></returns>
         [HttpDelete(Name = "DeletePairing")]
-        public IActionResult DeletePairing(string alarmId)
+        public IActionResult DeletePairing(string alarmID)
         {
-            if (_alarmService.DeletePairing(alarmId))
+
+            if (_alarmService.DeletePairing(alarmID))
             {
                 return Ok();
             }
@@ -48,25 +50,37 @@ namespace HåndværkervognenAPI.Controllers
         }
 
         /// <summary>
-        /// post request that takes alarmid and notifies users and changes alarm state
+        /// post request that takes alarmid and notifies users and change a field in the database
         /// </summary>
-        /// <param name="alarmId"></param>
+        /// <param name="alarmID"></param>
         /// <returns></returns>
         [HttpPost(Name = "ActivateAlarm")]
-        public IActionResult ActivateAlarm(string alarmId)
+        public IActionResult ActivateAlarm(AlarmIdPOGO alarmID)
         {
-            if (_alarmService.AlertUser(alarmId))
+            if (_alarmService.CheckIfAlarmExist(alarmID.AlarmID))
             {
-                return Ok();
+                if (!_alarmService.GetStatus(alarmID.AlarmID))
+                {
+                    if (_alarmService.AlertUser(alarmID.AlarmID))
+                    {
+                        return Ok("Alarm startet");
+                    }
+                    return BadRequest();
+                }
+                return BadRequest("Alarm already on");
             }
-            return BadRequest();
+            return NotFound("No alarm found");
         }
 
 
         [HttpGet(Name = "GetStatus")]
-        public IActionResult GetStatus(string alarmId)
+        public IActionResult GetStatus(string alarmID)
         {
-            return Ok(_alarmService.GetStatus(alarmId));
+            if (_alarmService.CheckIfAlarmExist(alarmID))
+            {
+                return Ok(_alarmService.GetStatus(alarmID));
+            }
+            return NotFound();
         }
     }
 }
