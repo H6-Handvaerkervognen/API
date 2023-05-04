@@ -2,6 +2,7 @@
 using HåndværkervognenAPI.Managers;
 using HåndværkervognenAPI.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -146,7 +147,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _validToken)).Returns("Yes");
+            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _validToken)).Returns(true);
 
             // Act
             var result = _controller.PairAlarm(_validPairInfo);
@@ -162,13 +163,13 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetAuthorizedRequestHeader();
-            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _validToken)).Returns("No");
+            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _validToken)).Returns(false);
 
             // Act
             var result = _controller.PairAlarm(_validPairInfo);
 
             // Assert
-            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
@@ -176,7 +177,7 @@ namespace Håndværkervognen_Test.Controller_Tests
         {
             // Arrange
             SetUnauthorizedRequestHeader();
-            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _invalidToken)).Returns("No");
+            _mockAppService.Setup(service => service.PairAlarm(_validPairInfo, _invalidToken)).Returns(false);
 
             // Act
             var result = _controller.PairAlarm(_validPairInfo);

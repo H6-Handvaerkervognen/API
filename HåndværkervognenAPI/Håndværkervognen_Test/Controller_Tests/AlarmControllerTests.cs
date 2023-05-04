@@ -86,22 +86,26 @@ namespace Håndværkervognen_Test.Controller_Tests
         public void ActivateAlarm_ReturnsOkResult_WhenAlarmIsActivated()
         {
             // Arrange
-            string testAlarmId = "testAlarmId";
-            _mockAlarmService.Setup(service => service.AlertUser(testAlarmId)).Returns(true);
+            AlarmIdPOGO testAlarmId = new AlarmIdPOGO( "testAlarmId");
+            _mockAlarmService.Setup(service => service.CheckIfAlarmExist(testAlarmId.AlarmID)).Returns(true);
+            _mockAlarmService.Setup(service => service.GetStatus(testAlarmId.AlarmID)).Returns(false);
+            _mockAlarmService.Setup(service => service.AlertUser(testAlarmId.AlarmID)).Returns(true);
 
             // Act
             var result = _controller.ActivateAlarm(testAlarmId);
 
             // Assert
-            Assert.IsType<OkResult>(result);
+            Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
         public void ActivateAlarm_ReturnsBadRequestResult_WhenAlarmIsNotActivated()
         {
             // Arrange
-            string testAlarmId = "testAlarmId";
-            _mockAlarmService.Setup(service => service.AlertUser(testAlarmId)).Returns(false);
+            AlarmIdPOGO testAlarmId = new AlarmIdPOGO( "testAlarmId");
+            _mockAlarmService.Setup(service => service.CheckIfAlarmExist(testAlarmId.AlarmID)).Returns(true);
+            _mockAlarmService.Setup(service => service.GetStatus(testAlarmId.AlarmID)).Returns(false);
+            _mockAlarmService.Setup(service => service.AlertUser(testAlarmId.AlarmID)).Returns(false);
 
             // Act
             var result = _controller.ActivateAlarm(testAlarmId);

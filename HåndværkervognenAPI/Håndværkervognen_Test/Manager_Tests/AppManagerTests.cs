@@ -64,7 +64,7 @@ namespace Håndværkervognen_Test.Manager_Tests
             var result = _appManager.PairAlarm(new PairInfo(_validAlarmInfoDto, _validUsername), _validToken);
 
             // Assert
-            Assert.True(result == "Yes");
+            Assert.True(result == true);
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace Håndværkervognen_Test.Manager_Tests
             var result = _appManager.PairAlarm(new PairInfo(_validAlarmInfoDto, _validUsername), _validToken);
 
             // Assert
-            Assert.True(result == "No");
+            Assert.True(result == false);
         }
 
         [Fact]

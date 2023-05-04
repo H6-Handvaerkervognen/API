@@ -1,5 +1,6 @@
 ﻿using HåndværkervognenAPI.Managers;
 using HåndværkervognenAPI.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HåndværkervognenAPI.Controllers
@@ -28,7 +29,7 @@ namespace HåndværkervognenAPI.Controllers
             AlarmInfoDto alarmInfo = _alarmService.GetAlarmInfo(alarmId);
             if (alarmInfo == null)
             {
-                return BadRequest("That alarm doesn't exist");
+                return NoContent();
             }
             return Ok(alarmInfo);
         }

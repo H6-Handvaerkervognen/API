@@ -181,7 +181,7 @@ namespace HåndværkervognenAPI.Database
         /// </summary>
         /// <param name="username">username</param>
         /// <param name="alarmDal">The alarm to update</param>
-        public void UpdateTimespan(string username, AlarmDal alarmDal)
+        public void UpdateAlarmInfo(string username, AlarmDal alarmDal)
         {
             using (_sqlConnection = new SqlConnection(_connString))
             {
