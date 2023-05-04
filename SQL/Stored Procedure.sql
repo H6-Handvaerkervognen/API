@@ -60,9 +60,9 @@ AS
 GO
 
 -- Updates the active hours for an alarm
-CREATE OR ALTER PROCEDURE UpdateActiveHours @AlarmId VARCHAR(200), @StartTime VARBINARY(MAX), @EndTime VARBINARY(MAX)
+CREATE OR ALTER PROCEDURE UpdateAlarm @AlarmId VARCHAR(200), @StartTime VARBINARY(MAX), @EndTime VARBINARY(MAX), @AlarmName VARBINARY(MAX)
 AS
-	UPDATE [Alarms] SET [StartTime] = @StartTime, [EndTime] = @EndTime WHERE [Id] = @AlarmId;
+	UPDATE [Alarms] SET [StartTime] = @StartTime, [EndTime] = @EndTime WHERE [Id] = @AlarmId, [Name] = @AlarmName;
 GO
 
 -- Gets info on an alarm by alarm id
