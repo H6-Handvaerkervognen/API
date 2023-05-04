@@ -70,7 +70,7 @@ namespace HåndværkervognenAPI.Database
 
 
         /// <summary>
-        /// Get the info on an alaarm from the database
+        /// Get the info on an alarm from the database
         /// </summary>
         /// <param name="alarmId">the id of the alarm to get info on</param>
         /// <returns></returns>
@@ -118,7 +118,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Retrieves a user from the daatabase from a usename
+        /// Retrieves a user from the database from a usename
         /// </summary>
         /// <param name="username">username of the user to get</param>
         /// <returns></returns>
@@ -236,7 +236,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Checks if the pair exists in the databse
+        /// Checks if the pair exists in the database
         /// </summary>
         /// <param name="alarmId">The alarms id</param>
         /// <param name="username">The user</param>
@@ -288,7 +288,7 @@ namespace HåndværkervognenAPI.Database
         }
 
         /// <summary>
-        /// Checks if the alarm i on or off
+        /// Checks if the alarm is on or off
         /// </summary>
         /// <param name="alarmId">The alarms id</param>
         /// <returns></returns>
